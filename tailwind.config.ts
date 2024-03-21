@@ -8,13 +8,20 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: {
+        'custom-blue': '#14243D',
+      },
+      fontFamily: {
+        'century-gothic-pro': ['"Century Gothic Pro"', 'sans-serif'],
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      
     },
   },
   plugins: [],
 };
+
 export default config;
