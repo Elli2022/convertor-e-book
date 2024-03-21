@@ -11,6 +11,10 @@ const config: Config = {
       colors: {
         'custom-blue': '#14243D',
       },
+      padding: {
+        '3px': '3px',
+        '10px': '10px',
+      },
       fontFamily: {
         'century-gothic-pro': ['"Century Gothic Pro"', 'sans-serif'],
       },

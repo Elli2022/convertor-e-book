@@ -1,14 +1,28 @@
 "use client"
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import MenuModal from './MenuModal';
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+    // Automatically close the modal on larger screens
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth >= 1024) {
+                setIsMenuOpen(false);
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     return (
         <nav className="bg-white py-4 w-full flex justify-between items-center px-4 lg:px-8">
             {/* Logo */}
-            <img src="/images/convertor-logo.svg" alt="Convertor Logo" className="h-8 w-auto" />
+            <a href="https://convertor.se/">
+            <img src="/images/convertor-logo.svg" alt="Convertor Logo" className="h-8 w-auto"/>
+            </a>
             
             {/* Hamburger Menu Button */}
             <button className="lg:hidden ml-auto" onClick={() => setIsMenuOpen(!isMenuOpen)}>
