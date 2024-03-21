@@ -1,0 +1,14 @@
+@keyframes horizontal-bounce {
+    0%, 100% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(100%); /* Adjust the translateX value for the desired amplitude */
+    }
+  }
+  
+  .animate-horizontal-bounce {
+    animation: horizontal-bounce 10s infinite alternate ease-in-out; /* Adjust timing as desired */
+  }
+  
+  

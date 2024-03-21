@@ -1,7 +1,7 @@
 //src/app/page.tsx
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
-import WelcomeSection from '../components/WelcomeSection'; // Adjust the import path as necessary
+import WelcomeSection from '../components/WelcomeSection/WelcomeSection'; // Adjust the import path as necessary
 
 
 export default function Home() {
