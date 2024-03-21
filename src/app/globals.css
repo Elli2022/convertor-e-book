@@ -31,3 +31,22 @@ body {
     text-wrap: balance;
   }
 }
+
+
+/* Add custom animation keyframes for the ellipse */
+@keyframes bounce-slow {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+}
+
+.font-century-gothic-pro {
+  font-family: "Century Gothic Pro", sans-serif;
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 3s infinite ease-in-out;
+}

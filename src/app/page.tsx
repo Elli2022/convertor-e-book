@@ -1,13 +1,14 @@
 //src/app/page.tsx
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
+import WelcomeSection from '../components/WelcomeSection'; // Adjust the import path as necessary
+
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between">
-      <div className="z-10 w-full items-center justify-between font-mono text-sm lg:flex">
+    <main className="flex min-h-screen flex-col items-center">
        <Navbar/>
-      </div>
+       <WelcomeSection/>
     </main>
   );
 }
