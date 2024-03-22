@@ -3,6 +3,7 @@ import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import WelcomeSection from "../components/WelcomeSection/WelcomeSection";
 import WeArePassionate from "../components/WeArePassionateSection";
+import PrestigelessSection from "@/components/PrestigelessSection";
 
 export default function Home() {
   return (
@@ -10,6 +11,8 @@ export default function Home() {
       <Navbar />
       <WelcomeSection />
       <WeArePassionate />
+      <PrestigelessSection />
+
     </main>
   );
 }
