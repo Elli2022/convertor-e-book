@@ -5,6 +5,7 @@ import WelcomeSection from "../components/WelcomeSection/WelcomeSection";
 import WeArePassionate from "../components/WeArePassionateSection";
 import PrestigelessSection from "@/components/PrestigelessSection";
 import ResultOrientedSection from "@/components/ResultOrientedSection";
+import WeAreDoersSection from "@/components/WeAreDoersSection";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
       <WeArePassionate />
       <PrestigelessSection />
     <ResultOrientedSection />
+    <WeAreDoersSection />
     </main>
   );
 }
