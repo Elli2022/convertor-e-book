@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import WelcomeSection from "../components/WelcomeSection/WelcomeSection";
 import WeArePassionate from "../components/WeArePassionateSection";
 import PrestigelessSection from "@/components/PrestigelessSection";
+import ResultOrientedSection from "@/components/ResultOrientedSection";
 
 export default function Home() {
   return (
@@ -12,7 +13,7 @@ export default function Home() {
       <WelcomeSection />
       <WeArePassionate />
       <PrestigelessSection />
-
+    <ResultOrientedSection />
     </main>
   );
 }
