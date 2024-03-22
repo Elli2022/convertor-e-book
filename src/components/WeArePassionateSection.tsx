@@ -3,13 +3,11 @@ import React from 'react';
 const NewSection = () => {
   return (
     <>
-      <section
-        className="text-center w-full relative overflow-hidden flex flex-col lg:flex-row items-center justify-center bg-[#15253E] p-8 sm:p-12 md:p-16 lg:p-20">
+      <section className="text-center w-full relative overflow-hidden flex flex-col lg:flex-row items-center justify-center bg-[#15253E] p-8 sm:p-12 md:p-16 lg:p-20">
         
         {/* Image Container */}
-        {/* Lägg till lg:mr-14 för att skapa utrymme till höger om bilden i desktopläge */}
-        <div className="w-full lg:w-1/2 lg:order-2 flex justify-center lg:justify-end lg:ml-14" style={{ maxWidth: '503px' }}>
-          <img src="/images/imageConvertor1.jpeg" alt="Beskrivande text" className="w-full h-auto lg:h-[503px] lg:w-[503px] object-cover" />
+        <div className="w-full lg:w-1/2 lg:order-2 flex justify-center lg:justify-end lg:ml-14 group" style={{ maxWidth: '503px' }}>
+          <img src="/images/imageConvertor1.jpeg" alt="Beskrivande text" className="w-full h-auto lg:h-[503px] lg:w-[503px] object-cover transition-transform duration-300 ease-in-out group-hover:scale-110" />
         </div>
         
         {/* Text Container */}
@@ -18,7 +16,7 @@ const NewSection = () => {
           <p className="text-white text-base md:text-lg lg:text-xl font-extralight mt-4">
             Vi är passionerade – det ligger i vårt DNA.<br/>
             Vi är nyfikna på alla våra uppdragsgivares olika branscher, men också på de möjligheter vi med teknikens hjälp kan skapa tillsammans.<br/><br/>
-            Vi är alltid lojala mot uppgiften, drar oss inte för att utmana det förväntade och släpper inte greppet förrän vi levererat en lösning vi alla kan vara stolta över
+            Vi är alltid lojala mot uppgiften, drar oss inte för att utmana det förväntade och släpper inte greppet förrän vi levererat en lösning vi alla kan vara stolta över.
           </p>
         </div>
       </section>
