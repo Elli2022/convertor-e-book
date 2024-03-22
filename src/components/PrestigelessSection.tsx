@@ -19,7 +19,7 @@ const PrestigelessSection = () => {
       {/* Text Container - Denna kommer att vara först på skärmar större än "md" eftersom bilden använder "md:order-last" */}
       <div className="w-full max-w-4xl mx-auto mb-8 lg:mb-12 text-left z-10">
         <h1 className="text-black font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-left md:text-center mt-5">Vi är <span className="text-[#33ABBD]">prestigelösa</span></h1>
-        <p className="text-black text-lg md:text-xl lg:text-2xl font-light mt-4 break-words">
+        <p className="text-black text-base md:text-lg lg:text-xl font-extralight mt-4 break-words">
           Vi har ögonen på bollen och vet vad som är viktigt. Och för oss handlar det varken om titlar eller formalia, utan om att skapa de allra bästa förutsättningarna – för våra kunder och för varandra, som kollegor.<br/><br/>
           På Convertor utvecklas vi tillsammans, vi tror på öppenhet och transparens och vi vet att vår allra största tillgång är människorna vi har omkring oss.
         </p>

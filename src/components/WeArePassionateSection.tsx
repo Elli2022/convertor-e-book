@@ -15,7 +15,7 @@ const NewSection = () => {
         {/* Text Container */}
         <div className="w-full lg:w-1/2 lg:order-1 flex flex-col text-left justify-center">
           <h1 className="text-white font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight font-century-gothic-pro mt-5">Vi är <span className="text-[#33ABBD]">passionerade</span></h1>
-          <p className="text-white text-lg md:text-xl lg:text-2xl font-light mt-4 break-words">
+          <p className="text-white text-base md:text-lg lg:text-xl font-extralight mt-4">
             Vi är passionerade – det ligger i vårt DNA.<br/>
             Vi är nyfikna på alla våra uppdragsgivares olika branscher, men också på de möjligheter vi med teknikens hjälp kan skapa tillsammans.<br/><br/>
             Vi är alltid lojala mot uppgiften, drar oss inte för att utmana det förväntade och släpper inte greppet förrän vi levererat en lösning vi alla kan vara stolta över
