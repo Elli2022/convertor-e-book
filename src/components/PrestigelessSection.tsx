@@ -6,11 +6,10 @@ const PrestigelessSection = () => {
 <>
     <section className="text-center w-full relative overflow-hidden flex flex-col items-center justify-center bg-white p-8 sm:p-12 md:p-16 lg:p-20">
 
-       {/* Ellipse (Circle) */}
-       <div
-          className="absolute right-0 top-1/2 w-[60vw] h-[60vw] bg-[#D3E0E5] rounded-full"
-          style={{ transform: 'translate(50%, -50%)' }}
-        />
+        {/* Ellipse (Circle) */}
+        <div className="absolute right-0 top-1/2 w-[50vw] h-[50vw] md:w-[35vw] md:h-[35vw] bg-[#D3E0E5] rounded-full" style={{ transform: 'translateY(-50%)' }} />
+
+
       {/* Image Container - Lägg denna först i koden och använd "md:order-last" för att flytta den efter texten på skärmar större än "md" */}
       <div className="w-full max-w-4xl mx-auto md:order-last z-10">
         <img src="/images/imageConvertor2.png" alt="Beskrivande text" className="w-full h-auto object-contain"/>
