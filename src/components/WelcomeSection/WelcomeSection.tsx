@@ -3,42 +3,63 @@ import React, { useEffect, useState } from 'react';
 
 const WelcomeSection = () => {
   const scaleStart = 0.5; // Startskala
-  const scaleEnd = 1.0; // Mål för skala
+  const scaleEnd = 2.5; // Mål för skala
+  const translateYStart = 0; // Startposition för translateY
   const scaleIncreaseRate = 0.001; // Takt på skalningsökning per pixel scrollad
   const [scale, setScale] = useState(scaleStart);
-  const [translateY, setTranslateY] = useState(0);
-  const [isFullScale, setIsFullScale] = useState(false); // Ny state för att spåra när full skala nås
+  const [translateY, setTranslateY] = useState(translateYStart);
+  const [isFullScale, setIsFullScale] = useState(false); // Spåra när full skala nås
 
-  const handleScroll = (event) => {
-    if (!isFullScale) {
-      event.preventDefault(); // Förhindra scroll tills full skala nås
-
-      // Beräkna ny skala
-      const newScale = Math.min(scale + scaleIncreaseRate * event.deltaY, scaleEnd);
-      setScale(newScale);
-
-      // Om skalan når sitt max, tillåt normal scroll och börja flytta ellipsen
-      if (newScale === scaleEnd) {
-        setIsFullScale(true);
-        // Här kan du eventuellt ta bort event listener om du inte vill ha fler skalningsjusteringar
-        // window.removeEventListener('wheel', handleScroll);
+  const handleScroll = (event:any) => {
+    const scrollDown = event.deltaY > 0;
+    if (scrollDown) {
+      if (!isFullScale) {
+        event.preventDefault(); // Förhindra faktisk scroll
+        // Förstora tills full skala
+        const newScale = Math.min(scale + scaleIncreaseRate * event.deltaY, scaleEnd);
+        setScale(newScale);
+        if (newScale === scaleEnd) {
+          setIsFullScale(true);
+        }
+      } else {
+        // Flytta neråt efter full skala
+        setTranslateY(prevY => prevY + event.deltaY);
       }
     } else {
-      // När full skala har nåtts, justera ellipsens Y-position baserat på scroll
-      const deltaY = event.deltaY;
-      setTranslateY((prevY) => prevY + deltaY);
+      // När vi scrollar uppåt
+      if (translateY > translateYStart) {
+      
+        // Rör sig uppåt till startpositionen
+        const newY = Math.max(translateYStart, translateY - Math.abs(event.deltaY));
+        setTranslateY(newY);
+        if (newY === translateYStart && scale === scaleEnd) {
+          // Börja minska storleken när den når startpositionen och är fullskalig
+          setIsFullScale(false);
+        }
+      } else if (scale > scaleStart) {
+       
+        // Minska storleken till startskalan
+        const newScale = Math.max(scaleStart, scale - scaleIncreaseRate * Math.abs(event.deltaY));
+        setScale(newScale);
+        if (newScale === scaleStart) {
+          // Återställ flaggor om nödvändigt
+        }
+      }
     }
   };
 
   useEffect(() => {
     window.addEventListener('wheel', handleScroll, { passive: false });
 
-    return () => window.removeEventListener('wheel', handleScroll);
-  }, [scale, isFullScale]); // Uppdatera dependencies för att inkludera isFullScale
+    return () => {
+      window.removeEventListener('wheel', handleScroll);
+    };
+  }, [scale, translateY, isFullScale]);
 
   const ellipsisStyle = {
     transform: `scale(${scale}) translateY(${translateY}px)`,
   };
+
 
   return (
     <>
