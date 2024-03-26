@@ -4,10 +4,23 @@ import React, { useState } from "react";
 const FormSection = () => {
   const [email, setEmail] = useState("");
 
-  const handleSubmit = (event:any) => {
+  const handleSubmit = async (event:any) => {
     event.preventDefault();
-    alert(`E-postadress ${email} har skickats!`);
+    try {
+      const response = await fetch('/.netlify/functions/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+      const responseData = await response.json();
+      alert(responseData.message);
+    } catch (error) {
+      alert('Det gick inte att prenumerera.');
+    }
   };
+  
 
   return (
     <section className="flex justify-center items-center w-full bg-[#D3E0E5] p-4 sm:p-8 md:p-12 lg:p-16 xl:p-20">
