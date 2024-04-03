@@ -6,7 +6,7 @@ import WeArePassionate from "../components/WeArePassionateSection";
 import PrestigelessSection from "@/components/PrestigelessSection";
 import ResultOrientedSection from "@/components/ResultOrientedSection";
 import WeAreDoersSection from "@/components/WeAreDoersSection";
-import FormSection from "@/components/FormSection";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
@@ -17,7 +17,8 @@ export default function Home() {
       <PrestigelessSection />
     <ResultOrientedSection />
     <WeAreDoersSection />
-    <FormSection />
+    <Footer />
+     
 
 
     </main>

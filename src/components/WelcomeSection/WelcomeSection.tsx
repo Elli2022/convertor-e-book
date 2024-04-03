@@ -10,6 +10,10 @@ const WelcomeSection = () => {
   const [translateY, setTranslateY] = useState(translateYStart);
   const [isFullScale, setIsFullScale] = useState(false); // Spåra när full skala nås
 
+
+  // Uppdaterad state för textfärg
+  const [textColor, setTextColor] = useState('#32ABBC');
+
   const handleScroll = (event:any) => {
     const scrollDown = event.deltaY > 0;
     if (scrollDown) {
@@ -48,6 +52,11 @@ const WelcomeSection = () => {
     }
   };
 
+  const checkIfEllipsisCoversText = () => {
+    // Lägg till logik här för att bestämma om ellipsen täcker texten,
+    // baserat på scale och translateY värdena. Detta är ett exempelvillkor:
+    return scale > 1.2 && translateY < 100;
+  };
   useEffect(() => {
     window.addEventListener('wheel', handleScroll, { passive: false });
 
@@ -60,6 +69,10 @@ const WelcomeSection = () => {
     transform: `scale(${scale}) translateY(${translateY}px)`,
   };
 
+  useEffect(() => {
+    const coversText = checkIfEllipsisCoversText();
+    setTextColor(coversText ? 'white' : '#32ABBC');
+  }, [scale, translateY]);
 
   return (
     <>
@@ -68,7 +81,10 @@ const WelcomeSection = () => {
         <div className="z-10 relative max-w-4xl mx-auto px-4">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold font-century-gothic-pro text-black">Välkommen till</h1>
           <div className="mt-2 text-lg md:text-xl lg:text-3xl font-bold font-century-gothic-pro text-black">en byrå fylld av passionerade,</div>
-          <div className="text-lg md:text-xl lg:text-3xl font-bold font-century-gothic-pro" style={{ color: '#32ABBC' }}>prestigelösa och resultatdrivna doers.</div>
+          {/* Uppdaterad textfärg baserad på ellipsens position och skala */}
+          <div className={`text-lg md:text-xl lg:text-3xl font-bold font-century-gothic-pro`} style={{ color: textColor }}>
+            prestigelösa och resultatdrivna doers.
+          </div>
         </div>
       </section>
     </>
