@@ -73,7 +73,6 @@ const WelcomeSection = () => {
     const coversText = checkIfEllipsisCoversText();
     setTextColor(coversText ? 'white' : '#32ABBC');
   }, [scale, translateY]);
-
   return (
     <>
       <section className="text-center w-full relative overflow-hidden flex items-center justify-center" style={{ background: '#D3E0E5', height: '503px' }}>
