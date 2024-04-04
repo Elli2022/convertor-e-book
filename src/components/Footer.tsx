@@ -16,32 +16,35 @@ const Footer = () => {
           </div>
           <div className="flex flex-col lg:flex-row items-start lg:items-center space-y-4 lg:space-y-0 lg:space-x-10">
             <div className="space-y-2">
-              <span>040-885 93 90</span>
+              <span>040-885 93 90</span> <br />
               <span>info@convertor.se</span>
             </div>
             <div className="space-y-2">
-              <span>Nordenskiöldsgatan 24</span>
+              <span>Nordenskiöldsgatan 24</span> <br />
               <span>211 19 Malmö</span>
             </div>
           </div>
         </div>
         <div className="text-center lg:text-left border-t border-gray-600 pt-4">
-          <p className="text-sm">
-            Alla rättigheter reserverade © 2023 | 
-            <a href="#integritetspolicy" className="hover:underline text-[#32ABBC]">Läs vår Integritetspolicy</a> | 
-            <a href="#installningar" className="hover:underline text-[#32ABBC]">Ändra dina inställningar</a>
-          </p>
-          <div className="flex justify-center lg:justify-start gap-4 mt-4">
-            <a href="#" aria-label="Facebook"><FaFacebookF /></a>
-            <a href="#" aria-label="LinkedIn"><FaLinkedinIn /></a>
-            <a href="#" aria-label="Instagram"><FaInstagram /></a>
-          </div>
+         
+         
         </div>
         <div >
            {/* Logo */}
            <a href="https://convertor.se/">
-            <img src="/images/convertor-logo.svg" alt="Convertor Logo" className="h-8 w-auto"/>
+            <img src="/images/Link → logo-white.png.png" alt="Convertor Logo" className="h-8 w-auto"/>
             </a>
+            <div className="flex justify-center lg:justify-start gap-4 mt-4">
+            <a href="#" aria-label="Facebook"><FaFacebookF /></a>
+            <a href="#" aria-label="LinkedIn"><FaLinkedinIn /></a>
+            <a href="#" aria-label="Instagram"><FaInstagram /></a>
+          </div>
+            <p className="text-sm">
+            Alla rättigheter reserverade © 2023 | 
+            <a href="#integritetspolicy" className="hover:underline text-[#32ABBC]">Läs vår Integritetspolicy</a> | 
+            <a href="#installningar" className="hover:underline text-[#32ABBC]">Ändra dina inställningar</a>
+          </p>
+          
         </div>
       </div>
     </footer>
