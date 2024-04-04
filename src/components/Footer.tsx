@@ -56,21 +56,21 @@ const Footer = () => {
         </a>
       </div>
 
-      {/* Contact Information */}
-      <div className="container mx-auto py-8 px-4">
-        <div className="flex flex-col md:flex-row justify-center md:justify-between text-center md:text-left space-y-8 md:space-y-0">
-          <div className="space-y-4">
+      <div className="container mx-auto px-4">
+        {/* Contact Information */}
+        <div className="max-w-2xl mx-auto py-8 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 text-center md:text-left">
+          <div>
             <div className="space-y-2">
-              <span>040-885 93 90</span>
+              <span className="text-lg sm:text-base md:text-lg">040-885 93 90</span>
               <br />
-              <span>info@convertor.se</span>
+              <span className="text-lg sm:text-base md:text-lg">info@convertor.se</span>
             </div>
           </div>
-          <div className="space-y-4">
+          <div>
             <div className="space-y-2">
-              <span>Nordenskiöldsgatan 24</span>
+              <span className="text-lg sm:text-base md:text-lg">Nordenskiöldsgatan 24</span>
               <br />
-              <span>211 19 Malmö</span>
+              <span className="text-lg sm:text-base md:text-lg">211 19 Malmö</span>
             </div>
           </div>
         </div>
