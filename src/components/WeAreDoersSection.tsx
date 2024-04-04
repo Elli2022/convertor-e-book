@@ -27,8 +27,8 @@ const WeAreDoersSection = () => {
         />
 
         {/* Text Container */}
-        <div className="z-10 max-w-4xl mx-auto px-4">
-          <h1 className="text-white font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight font-century-gothic-pro mt-5">
+        <div className="z-10 max-w-4xl mx-auto px-4 mt-[117px] lg:mt-[85px]">
+          <h1 className="text-white font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight font-century-gothic-pro">
             Med andra ord: <br />
             vi är <span className="text-[#33ABBD]">doers.</span>
           </h1>
