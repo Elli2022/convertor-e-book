@@ -58,7 +58,11 @@ const Footer = () => {
 
       <div>
         {/* Contact Information */}
-        <div className="flex flex-wrap justify-center space-x-2 sm:space-x-4 md:space-x-12 lg:space-x-8 xl:space-x-10 2xl:space-x-30 mb-8 text-sm sm:text-base md:text-lg lg:text-xl text-left gap-4 mb-8">
+        <div className="flex flex-wrap justify-center space-x-2 sm:space-x-4 md:space-x-12 lg:space-x-8 xl:space-x-10 2xl:space-x-30 mb-8 text-sm sm:text-base md:text-lg lg:text-xl text-left gap-4 mb-20 mt-12"
+        
+        style={{
+            fontFamily: "Helvetica Neue",
+          }}>
           <div className="space-y-3">
             <span className="block">040-885 93 90</span>
             <span className="block">info@convertor.se</span>
@@ -75,10 +79,10 @@ const Footer = () => {
             className="lg:inline-block lg:mx-0 mx-auto"
           >
             <img
-              src="/images/Link → logo-white.png.png"
+              src="/images/convertorLogo.png"
               alt="Convertor Logo"
-              className="mx-auto h-6 sm:h-7 md:h-8 lg:h-10 xl:h-12"
-            />
+              className="mx-auto h-8 sm:h-9 md:h-10 lg:h-12 xl:h-14 mb-12"
+              />
           </a>
           <div className="flex justify-center lg:justify-start gap-4 mt-4">
             <a href="#" aria-label="Facebook">
