@@ -4,8 +4,8 @@ const Footer = () => {
   return (
     <footer className="text-center w-full relative overflow-hidden flex flex-col items-center justify-center bg-[#15253E] p-8 sm:p-12 md:p-16 lg:p-20 text-white">
       <div
-        className="flex flex-wrap justify-center space-x-2 sm:space-x-4 md:space-x-6 lg:space-x-8 xl:space-x-10 2xl:space-x-20 mb-8 text-sm sm:text-base md:text-lg lg:text-xl"
-        style={{
+      className="flex flex-wrap justify-center space-x-2 sm:space-x-4 md:space-x-6 lg:space-x-8 xl:space-x-10 2xl:space-x-20 mb-8 text-base sm:text-lg md:text-xl lg:text-2xl"
+      style={{
           fontFamily: "Helvetica Neue",
           fontWeight: 300,
           lineHeight: "20px",
