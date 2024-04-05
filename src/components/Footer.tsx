@@ -4,10 +4,9 @@ const Footer = () => {
   return (
     <footer className="text-center w-full relative overflow-hidden flex flex-col items-center justify-center bg-[#15253E] p-8 sm:p-12 md:p-16 lg:p-20 text-white">
       <div
-      className="flex flex-wrap justify-center space-x-2 sm:space-x-4 md:space-x-6 lg:space-x-8 xl:space-x-10 2xl:space-x-20 mb-8 text-base sm:text-lg md:text-xl lg:text-2xl"
+      className="flex flex-wrap justify-center space-x-2 sm:space-x-4 md:space-x-6 lg:space-x-8 xl:space-x-10 2xl:space-x-20 mb-8 text-base sm:text-lg md:text-xl lg:text-2xl font-extralight "
       style={{
           fontFamily: "Helvetica Neue",
-          fontWeight: 300,
           lineHeight: "20px",
         }}
       >
@@ -61,6 +60,8 @@ const Footer = () => {
           className="flex flex-wrap justify-center space-x-2 sm:space-x-4 md:space-x-12 lg:space-x-8 xl:space-x-10 2xl:space-x-30 mb-8 text-sm sm:text-base md:text-lg lg:text-xl text-left gap-4 mb-20 mt-12"
           style={{
             fontFamily: "Helvetica Neue",
+            fontWeight: 300,
+    lineHeight: "20px",
           }}
         >
           <div className="space-y-3">
@@ -74,16 +75,15 @@ const Footer = () => {
         </div>
 
         <div>
-          <a
-            href="https://convertor.se/"
-            className="lg:inline-block lg:mx-0 mx-auto"
-          >
-            <img
-              src="/images/convertorLogo.png"
-              alt="Convertor Logo"
-              className="mx-auto h-8 sm:h-9 md:h-10 lg:h-12 xl:h-14 mb-12"
-            />
-          </a>
+        <a href="https://convertor.se/" className="lg:inline-block lg:mx-0 mx-auto">
+  <img
+    src="/images/convertorLogo.png"
+    alt="Convertor Logo"
+    className="mx-auto h-10 sm:h-9 md:h-8 lg:h-6 xl:h-8 mb-12 mt-12"
+  />
+</a>
+
+
 
           {/* Wrapper to control layout */}
           <div className="container mx-auto flex flex-col-reverse lg:flex-row items-center justify-between space-y-4 lg:space-y-0 lg:space-x-4">
