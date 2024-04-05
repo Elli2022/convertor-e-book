@@ -56,24 +56,19 @@ const Footer = () => {
         </a>
       </div>
 
-      <div className="container mx-auto px-4">
-        {/* Contact Information */}
-        <div className="max-w-2xl mx-auto py-8 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 text-center md:text-left">
-          <div>
-            <div className="space-y-2">
-              <span className="text-lg sm:text-base md:text-lg">040-885 93 90</span>
-              <br />
-              <span className="text-lg sm:text-base md:text-lg">info@convertor.se</span>
-            </div>
-          </div>
-          <div>
-            <div className="space-y-2">
-              <span className="text-lg sm:text-base md:text-lg">Nordenskiöldsgatan 24</span>
-              <br />
-              <span className="text-lg sm:text-base md:text-lg">211 19 Malmö</span>
-            </div>
-          </div>
+      <div>
+       {/* Contact Information */}
+       <div  className="flex flex-wrap justify-center space-x-2 sm:space-x-4 md:space-x-12 lg:space-x-8 xl:space-x-10 2xl:space-x-30 mb-8 text-sm sm:text-base md:text-lg lg:text-xl text-left">
+        <div>
+          <span>040-885 93 90</span><br />
+          <span>info@convertor.se</span>
         </div>
+        <div>
+          <span>Nordenskiöldsgatan 24</span><br />
+          <span>211 19 Malmö</span>
+        </div>
+      </div>
+     
 
         <div className="text-center lg:text-left border-t border-gray-600 pt-4">
           <a href="https://convertor.se/">
