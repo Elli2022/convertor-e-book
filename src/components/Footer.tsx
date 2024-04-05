@@ -87,25 +87,16 @@ const Footer = () => {
           </a>
           <div className="flex justify-center lg:justify-start gap-4 mt-4 mb-6">
             <a href="https://www.facebook.com/yourpage" aria-label="Facebook">
-              <img
-                src="/images/Link_1.svg"
-                alt="Facebook"
-                className="h-6 w-6"
-              />
+            <img src="/images/Link_1.svg" alt="Facebook" className="h-6 w-6 sm:h-8 sm:w-8" />
+
             </a>
             <a href="https://www.linkedin.com/yourpage" aria-label="LinkedIn">
-              <img
-                src="/images/Link_2.svg"
-                alt="LinkedIn"
-                className="h-6 w-6"
-              />
+            <img src="/images/Link_2.svg" alt="Facebook" className="h-6 w-6 sm:h-8 sm:w-8" />
+
             </a>
             <a href="https://www.instagram.com/yourpage" aria-label="Instagram">
-              <img
-                src="/images/Link_3.svg"
-                alt="Instagram"
-                className="h-6 w-6"
-              />
+            <img src="/images/Link_3.svg" alt="Facebook" className="h-6 w-6 sm:h-8 sm:w-8" />
+
             </a>
           </div>
 
