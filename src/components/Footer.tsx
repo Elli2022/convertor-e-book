@@ -57,25 +57,27 @@ const Footer = () => {
       </div>
 
       <div>
-       {/* Contact Information */}
-       <div  className="flex flex-wrap justify-center space-x-2 sm:space-x-4 md:space-x-12 lg:space-x-8 xl:space-x-10 2xl:space-x-30 mb-8 text-sm sm:text-base md:text-lg lg:text-xl text-left gap-4 mb-8">
-       <div className="space-y-3">
-        <span className="block">040-885 93 90</span>
-          <span className="block">info@convertor.se</span>
+        {/* Contact Information */}
+        <div className="flex flex-wrap justify-center space-x-2 sm:space-x-4 md:space-x-12 lg:space-x-8 xl:space-x-10 2xl:space-x-30 mb-8 text-sm sm:text-base md:text-lg lg:text-xl text-left gap-4 mb-8">
+          <div className="space-y-3">
+            <span className="block">040-885 93 90</span>
+            <span className="block">info@convertor.se</span>
+          </div>
+          <div className="space-y-3">
+            <span className="block">Nordenskiöldsgatan 24</span>
+            <span className="block">211 19 Malmö</span>
+          </div>
         </div>
-        <div className="space-y-3">
-        <span className="block">Nordenskiöldsgatan 24</span>
-          <span className="block">211 19 Malmö</span>
-        </div>
-      </div>
-     
 
-        <div className="text-center lg:text-left  pt-4">
-          <a href="https://convertor.se/">
+        <div>
+          <a
+            href="https://convertor.se/"
+            className="lg:inline-block lg:mx-0 mx-auto"
+          >
             <img
               src="/images/Link → logo-white.png.png"
               alt="Convertor Logo"
-              className="h-8 w-auto"
+              className="mx-auto h-6 sm:h-7 md:h-8 lg:h-10 xl:h-12"
             />
           </a>
           <div className="flex justify-center lg:justify-start gap-4 mt-4">
