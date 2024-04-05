@@ -58,11 +58,12 @@ const Footer = () => {
 
       <div>
         {/* Contact Information */}
-        <div className="flex flex-wrap justify-center space-x-2 sm:space-x-4 md:space-x-12 lg:space-x-8 xl:space-x-10 2xl:space-x-30 mb-8 text-sm sm:text-base md:text-lg lg:text-xl text-left gap-4 mb-20 mt-12"
-        
-        style={{
+        <div
+          className="flex flex-wrap justify-center space-x-2 sm:space-x-4 md:space-x-12 lg:space-x-8 xl:space-x-10 2xl:space-x-30 mb-8 text-sm sm:text-base md:text-lg lg:text-xl text-left gap-4 mb-20 mt-12"
+          style={{
             fontFamily: "Helvetica Neue",
-          }}>
+          }}
+        >
           <div className="space-y-3">
             <span className="block">040-885 93 90</span>
             <span className="block">info@convertor.se</span>
@@ -82,19 +83,32 @@ const Footer = () => {
               src="/images/convertorLogo.png"
               alt="Convertor Logo"
               className="mx-auto h-8 sm:h-9 md:h-10 lg:h-12 xl:h-14 mb-12"
-              />
+            />
           </a>
-          <div className="flex justify-center lg:justify-start gap-4 mt-4">
-            <a href="#" aria-label="Facebook">
-              <FaFacebookF />
+          <div className="flex justify-center lg:justify-start gap-4 mt-4 mb-6">
+            <a href="https://www.facebook.com/yourpage" aria-label="Facebook">
+              <img
+                src="/images/Link_1.svg"
+                alt="Facebook"
+                className="h-6 w-6"
+              />
             </a>
-            <a href="#" aria-label="LinkedIn">
-              <FaLinkedinIn />
+            <a href="https://www.linkedin.com/yourpage" aria-label="LinkedIn">
+              <img
+                src="/images/Link_2.svg"
+                alt="LinkedIn"
+                className="h-6 w-6"
+              />
             </a>
-            <a href="#" aria-label="Instagram">
-              <FaInstagram />
+            <a href="https://www.instagram.com/yourpage" aria-label="Instagram">
+              <img
+                src="/images/Link_3.svg"
+                alt="Instagram"
+                className="h-6 w-6"
+              />
             </a>
           </div>
+
           <p className="text-sm md:text-base">
             Alla rättigheter reserverade © 2023 |
             <a
