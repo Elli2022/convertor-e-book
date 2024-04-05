@@ -106,32 +106,29 @@ const Footer = () => {
             </p>
 
             {/* Social media icons */}
-            <div className="flex gap-4">
-              <a href="https://www.facebook.com/yourpage" aria-label="Facebook">
-                <img
-                  src="/images/Link_1.svg"
-                  alt="Facebook"
-                  className="h-6 w-6 sm:h-8 sm:w-8"
-                />
-              </a>
-              <a href="https://www.linkedin.com/yourpage" aria-label="LinkedIn">
-                <img
-                  src="/images/Link_2.svg"
-                  alt="LinkedIn"
-                  className="h-6 w-6 sm:h-8 sm:w-8"
-                />
-              </a>
-              <a
-                href="https://www.instagram.com/yourpage"
-                aria-label="Instagram"
-              >
-                <img
-                  src="/images/Link_3.svg"
-                  alt="Instagram"
-                  className="h-6 w-6 sm:h-8 sm:w-8"
-                />
-              </a>
-            </div>
+            <div className="flex justify-center gap-4 mb-6">
+        <a href="https://www.facebook.com/convertorsverige?locale=sv_SE" aria-label="Facebook" className="mb-4 sm:mb-6">
+          <img
+            src="/images/Link_1.svg"
+            alt="Facebook"
+            className="h-6 w-6 sm:h-8 sm:w-8"
+          />
+        </a>
+        <a href="https://www.linkedin.com/company/convertor-ab/mycompany/" aria-label="LinkedIn" className="mb-4 sm:mb-6">
+          <img
+            src="/images/Link_2.svg"
+            alt="LinkedIn"
+            className="h-6 w-6 sm:h-8 sm:w-8"
+          />
+        </a>
+        <a href="https://www.instagram.com/convertor_malmo/" aria-label="Instagram" className="mb-4 sm:mb-6">
+          <img
+            src="/images/Link_3.svg"
+            alt="Instagram"
+            className="h-6 w-6 sm:h-8 sm:w-8"
+          />
+        </a>
+      </div>
           </div>
         </div>
       </div>
