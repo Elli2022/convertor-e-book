@@ -70,7 +70,7 @@ const Footer = () => {
       </div>
      
 
-        <div className="text-center lg:text-left border-t border-gray-600 pt-4">
+        <div className="text-center lg:text-left  pt-4">
           <a href="https://convertor.se/">
             <img
               src="/images/Link → logo-white.png.png"
