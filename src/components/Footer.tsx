@@ -1,6 +1,5 @@
 import React from "react";
 
-
 const Footer = () => {
   return (
     <footer className="text-center w-full relative overflow-hidden flex flex-col items-center justify-center bg-[#15253E] p-8 sm:p-12 md:p-16 lg:p-20 text-white">
@@ -85,34 +84,55 @@ const Footer = () => {
               className="mx-auto h-8 sm:h-9 md:h-10 lg:h-12 xl:h-14 mb-12"
             />
           </a>
-          <div className="flex justify-center lg:justify-start gap-4 mt-4 mb-6">
-            <a href="https://www.facebook.com/convertorsverige?locale=sv_SE" aria-label="Facebook">
-            <img src="/images/Link_1.svg" alt="Facebook" className="h-6 w-6 sm:h-8 sm:w-8" />
 
-            </a>
-            <a href="https://www.linkedin.com/company/convertor-ab/mycompany/" aria-label="LinkedIn">
-            <img src="/images/Link_2.svg" alt="LinkedIn" className="h-6 w-6 sm:h-8 sm:w-8" />
+          {/* Wrapper to control layout */}
+          <div className="container mx-auto flex flex-col-reverse lg:flex-row items-center justify-between space-y-4 lg:space-y-0 lg:space-x-4">
+            {/* Text section */}
+            <p className="text-[13px] sm:text-[15px] lg:text-[16px] font-light text-[rgba(255,255,255,0.5)] max-w-full text-center lg:text-left">
+              Alla rättigheter reserverade © 2023 | Läs vår
+              <a
+                href="https://convertor.se/integritetspolicy/"
+                className="hover:underline text-[rgba(255,255,255,0.80)]"
+              >
+                Integritetspolicy
+              </a>
+              |
+              <a
+                href="https://convertor.se/#!"
+                className="hover:underline text-[rgba(255,255,255,0.80)]"
+              >
+                Ändra dina inställningar
+              </a>
+            </p>
 
-            </a>
-            <a href="https://www.instagram.com/convertor_malmo/" aria-label="Instagram">
-            <img src="/images/Link_3.svg" alt="Instagram" className="h-6 w-6 sm:h-8 sm:w-8" />
-
-            </a>
+            {/* Social media icons */}
+            <div className="flex gap-4">
+              <a href="https://www.facebook.com/yourpage" aria-label="Facebook">
+                <img
+                  src="/images/Link_1.svg"
+                  alt="Facebook"
+                  className="h-6 w-6 sm:h-8 sm:w-8"
+                />
+              </a>
+              <a href="https://www.linkedin.com/yourpage" aria-label="LinkedIn">
+                <img
+                  src="/images/Link_2.svg"
+                  alt="LinkedIn"
+                  className="h-6 w-6 sm:h-8 sm:w-8"
+                />
+              </a>
+              <a
+                href="https://www.instagram.com/yourpage"
+                aria-label="Instagram"
+              >
+                <img
+                  src="/images/Link_3.svg"
+                  alt="Instagram"
+                  className="h-6 w-6 sm:h-8 sm:w-8"
+                />
+              </a>
+            </div>
           </div>
-
-          <p className="text-sm md:text-base">
-            Alla rättigheter reserverade © 2023 |
-            <a
-              href="#integritetspolicy"
-              className="hover:underline text-[#32ABBC]"
-            >
-              Läs vår Integritetspolicy
-            </a>{" "}
-            |
-            <a href="#installningar" className="hover:underline text-[#32ABBC]">
-              Ändra dina inställningar
-            </a>
-          </p>
         </div>
       </div>
     </footer>
