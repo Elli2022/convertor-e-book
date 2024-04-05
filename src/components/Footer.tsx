@@ -58,14 +58,14 @@ const Footer = () => {
 
       <div>
        {/* Contact Information */}
-       <div  className="flex flex-wrap justify-center space-x-2 sm:space-x-4 md:space-x-12 lg:space-x-8 xl:space-x-10 2xl:space-x-30 mb-8 text-sm sm:text-base md:text-lg lg:text-xl text-left">
-        <div>
-          <span>040-885 93 90</span><br />
-          <span>info@convertor.se</span>
+       <div  className="flex flex-wrap justify-center space-x-2 sm:space-x-4 md:space-x-12 lg:space-x-8 xl:space-x-10 2xl:space-x-30 mb-8 text-sm sm:text-base md:text-lg lg:text-xl text-left gap-4 mb-8">
+       <div className="space-y-3">
+        <span className="block">040-885 93 90</span>
+          <span className="block">info@convertor.se</span>
         </div>
-        <div>
-          <span>Nordenskiöldsgatan 24</span><br />
-          <span>211 19 Malmö</span>
+        <div className="space-y-3">
+        <span className="block">Nordenskiöldsgatan 24</span>
+          <span className="block">211 19 Malmö</span>
         </div>
       </div>
      
