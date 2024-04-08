@@ -47,3 +47,18 @@ body {
 .no-cursor-pointer:hover {
   cursor: none;
 }
+
+
+@keyframes wave-animation {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0px); }
+}
+
+.wave-in {
+  opacity: 0;
+  animation: wave-animation 0.8s ease forwards;
+}
+
+.wave-in-view {
+  visibility: visible !important;
+}
