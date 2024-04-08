@@ -17,6 +17,7 @@ const config: Config = {
       },
       fontFamily: {
         'century-gothic-pro': ['"Century Gothic Pro"', 'sans-serif'],
+        'custom': ['CenturyGothicStd-bold', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

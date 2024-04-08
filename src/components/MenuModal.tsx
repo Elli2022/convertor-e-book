@@ -11,7 +11,7 @@ const MenuModal = ({
 
   return (
     <div
-    className="fixed inset-0 z-50 bg-[#14243DE6] p-5 flex flex-col items-center justify-center"
+    className="fixed inset-0 z-50 bg-[#14243DE6]/40 p-5 flex flex-col items-center justify-center"
 
     onClick={onClose}
     >
@@ -27,7 +27,7 @@ const MenuModal = ({
       {/* Menu Content */}
       <ul
         id="menu-main"
-        className="menu cf w-full flex flex-col items-center justify-center space-y-6"
+        className="menu cf w-full flex flex-col items-center justify-center space-y-10"
 
         style={{
           padding: "12% 0 0",
@@ -39,44 +39,44 @@ const MenuModal = ({
         }}
       >
         {/* Menu Items */}
-        <li className="menu-item menu-item-has-children">
+        <li className="menu-item menu-item-has-children ">
           <ul className="sub-menu">
-            <li className="menu-item">
+            <li className="menu-item mb-4">
               <a
                 href="https://convertor.se/"
-                className="text-white font-century-gothic-pro uppercase text-xs font-bold leading-tight hover:text-gray-300 pt-3px px-10px pb-0"
-              >
+                className="text-white font-semibold text-sm leading-loose w-full text-center py-2"
+                >
                 TJÄNSTER
               </a>
             </li>
-            <li className="menu-item">
+            <li className="menu-item mb-4">
               <a
                 href="https://convertor.se/kundcase/"
-                className="text-white font-century-gothic-pro uppercase text-xs font-bold leading-tight hover:text-gray-300 pt-3px px-10px pb-0"
+                className="text-white font-semibold text-sm leading-loose w-full text-center py-2"
               >
                 CASE
               </a>
             </li>
-            <li className="menu-item">
+            <li className="menu-item mb-4">
               <a
                 href="https://convertor.se/greenhouse/"
-                className="text-white font-century-gothic-pro uppercase text-xs font-bold leading-tight hover:text-gray-300 pt-3px px-10px pb-0"
+                className="text-white font-semibold text-sm leading-loose w-full text-center py-2"
               >
                 GREENHOUSE
               </a>
             </li>
-            <li className="menu-item">
+            <li className="menu-item mb-4">
               <a
                 href="https://convertor.se/insikt/"
-                className="text-white font-century-gothic-pro uppercase text-xs font-bold leading-tight hover:text-gray-300 pt-3px px-10px pb-0"
+                className="text-white font-semibold text-sm leading-loose w-full text-center py-2"
               >
                 INSIKT
               </a>
             </li>
-            <li className="menu-item">
+            <li className="menu-item mb-4">
               <a
                 href="https://convertor.se/karriar/"
-                className="text-white font-century-gothic-pro uppercase text-xs font-bold leading-tight hover:text-gray-300 pt-3px px-10px pb-0"
+                className="text-white font-semibold text-sm leading-loose w-full text-center py-2"
               >
                 KARRIÄR
               </a>
@@ -84,7 +84,7 @@ const MenuModal = ({
             <li className="menu-item">
               <a
                 href="https://convertor.se/kontakt/"
-                className="text-white font-century-gothic-pro uppercase text-xs font-bold leading-tight hover:text-gray-300 pt-3px px-10px pb-0"
+                className="text-white font-semibold text-sm leading-loose w-full text-center py-2"
               >
                 KONTAKT
               </a>
