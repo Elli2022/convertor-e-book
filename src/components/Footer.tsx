@@ -85,25 +85,26 @@ const Footer = () => {
 
 
 
-          {/* Wrapper to control layout */}
-          <div className="container mx-auto flex flex-col-reverse lg:flex-row items-center justify-between space-y-4 lg:space-y-0 lg:space-x-4">
-            {/* Text section */}
-            <p className="text-[13px] sm:text-[15px] lg:text-[16px] font-light text-[rgba(255,255,255,0.5)] max-w-full text-center lg:text-left">
-              Alla rättigheter reserverade © 2023 | Läs vår
-              <a
-                href="https://convertor.se/integritetspolicy/"
-                className="hover:underline text-[rgba(255,255,255,0.80)]"
-              >
-                Integritetspolicy
-              </a>
-              |
-              <a
-                href="https://convertor.se/#!"
-                className="hover:underline text-[rgba(255,255,255,0.80)]"
-              >
-                Ändra dina inställningar
-              </a>
-            </p>
+         {/* Wrapper to control layout */}
+      <div className="container mx-auto flex flex-col-reverse lg:flex-row items-center justify-between space-y-4 lg:space-y-0 lg:space-x-4">
+        {/* Text section */}
+        <p className="text-[13px] sm:text-[15px] lg:text-[16px] font-light text-[rgba(255,255,255,0.5)] max-w-full text-center lg:text-left">
+          Alla rättigheter reserverade © 2023 {' | '}
+          <span className="mx-1">Läs vår</span>
+          <a
+            href="https://convertor.se/integritetspolicy/"
+            className="hover:underline text-[rgba(255,255,255,0.80)]"
+          >
+            Integritetspolicy
+          </a>
+          <span className="mx-1">|</span>
+          <a
+            href="https://convertor.se/#!"
+            className="hover:underline text-[rgba(255,255,255,0.80)]"
+          >
+            Ändra dina inställningar
+          </a>
+        </p>
 
             {/* Social media icons */}
             <div className="flex justify-center gap-4 mb-6">
