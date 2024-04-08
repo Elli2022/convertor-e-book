@@ -1,6 +1,39 @@
-import React from "react";
+"use client"
+import React, { useRef, useEffect } from 'react';
 
-const WeAreDoersSection = () => {
+const WeAreDoersSection: React.FC = () => {
+  const textContainerRef = useRef<HTMLDivElement>(null); // Typreferens till textcontainern
+
+  useEffect(() => {
+    const observerOptions: IntersectionObserverInit = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1
+    };
+
+    const textObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('wave-in');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    const nodes = textContainerRef.current?.querySelectorAll('h1, p, p > span');
+    nodes?.forEach((node) => {
+      textObserver.observe(node);
+    });
+
+    return () => {
+      if (textObserver) {
+        nodes?.forEach((node) => {
+          textObserver.unobserve(node);
+        });
+      }
+    };
+  }, []);
+
   return (
     <>
       <style>
@@ -22,7 +55,7 @@ const WeAreDoersSection = () => {
         />
 
         {/* Text Container */}
-        <div className="z-10 max-w-4xl mx-auto px-4 mt-[116px] lg:mt-[76px] small-viewport-mt">
+        <div ref={textContainerRef} className="z-10 max-w-4xl mx-auto px-4 mt-[116px] lg:mt-[76px] small-viewport-mt">
           <h1 className="text-white font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight century-gothic-pro">
             Med andra ord: <br />
             vi är <span className="text-[#33ABBD]">doers.</span>
