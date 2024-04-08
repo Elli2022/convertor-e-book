@@ -57,7 +57,7 @@ const Footer = () => {
       <div>
         {/* Contact Information */}
         <div
-          className="flex flex-wrap justify-center space-x-2 sm:space-x-4 md:space-x-12 lg:space-x-8 xl:space-x-10 2xl:space-x-30 mb-8 text-sm sm:text-base md:text-lg lg:text-xl text-left gap-4 mb-20 mt-12"
+          className="flex flex-wrap justify-center space-x-2 sm:space-x-4 md:space-x-12 lg:space-x-8 xl:space-x-10 2xl:space-x-30 mb-8 text-sm sm:text-base md:text-lg lg:text-xl text-left gap-12 mb-20 mt-12"
           style={{
             fontFamily: "Helvetica Neue",
             fontWeight: 300,
