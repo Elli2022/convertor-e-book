@@ -85,52 +85,35 @@ const Footer = () => {
 
 
 
-         {/* Wrapper to control layout */}
-      <div className="container mx-auto flex flex-col-reverse lg:flex-row items-center justify-between space-y-4 lg:space-y-0 lg:space-x-4">
+      {/* Wrapper to control layout */}
+      <div className="container mx-auto flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0 lg:space-x-4">
+        
         {/* Text section */}
-        <p className="text-[13px] sm:text-[15px] lg:text-[16px] font-light text-[rgba(255,255,255,0.5)] max-w-full text-center lg:text-left">
+        <p className="text-[13px] sm:text-[15px] lg:text-[16px] font-light text-[rgba(255,255,255,0.5)]">
           Alla rättigheter reserverade © 2023 {' | '}
           <span className="mx-1">Läs vår</span>
-          <a
-            href="https://convertor.se/integritetspolicy/"
-            className="hover:underline text-[rgba(255,255,255,0.80)]"
-          >
+          <a href="https://convertor.se/integritetspolicy/" className="hover:underline text-[rgba(255,255,255,0.80)]">
             Integritetspolicy
           </a>
           <span className="mx-1">|</span>
-          <a
-            href="https://convertor.se/#!"
-            className="hover:underline text-[rgba(255,255,255,0.80)]"
-          >
+          <a href="https://convertor.se/#!" className="hover:underline text-[rgba(255,255,255,0.80)]">
             Ändra dina inställningar
           </a>
         </p>
-
-            {/* Social media icons */}
-            <div className="flex justify-center gap-4 mb-6">
-        <a href="https://www.facebook.com/convertorsverige?locale=sv_SE" aria-label="Facebook" className="mb-4 sm:mb-6">
-          <img
-            src="/images/Link_1.svg"
-            alt="Facebook"
-            className="h-6 w-6 sm:h-8 sm:w-8"
-          />
-        </a>
-        <a href="https://www.linkedin.com/company/convertor-ab/mycompany/" aria-label="LinkedIn" className="mb-4 sm:mb-6">
-          <img
-            src="/images/Link_2.svg"
-            alt="LinkedIn"
-            className="h-6 w-6 sm:h-8 sm:w-8"
-          />
-        </a>
-        <a href="https://www.instagram.com/convertor_malmo/" aria-label="Instagram" className="mb-4 sm:mb-6">
-          <img
-            src="/images/Link_3.svg"
-            alt="Instagram"
-            className="h-6 w-6 sm:h-8 sm:w-8"
-          />
-        </a>
-      </div>
-          </div>
+        
+        {/* Social media icons */}
+        <div className="flex justify-center gap-4">
+          <a href="https://www.facebook.com/convertorsverige?locale=sv_SE" aria-label="Facebook" className="hover:opacity-75">
+            <img src="/images/Link_1.svg" alt="Facebook" className="h-6 w-6 sm:h-8 sm:w-8" />
+          </a>
+          <a href="https://www.linkedin.com/company/convertor-ab/mycompany/" aria-label="LinkedIn" className="hover:opacity-75">
+            <img src="/images/Link_2.svg" alt="LinkedIn" className="h-6 w-6 sm:h-8 sm:w-8" />
+          </a>
+          <a href="https://www.instagram.com/convertor_malmo/" aria-label="Instagram" className="hover:opacity-75">
+            <img src="/images/Link_3.svg" alt="Instagram" className="h-6 w-6 sm:h-8 sm:w-8" />
+          </a>
+        </div>
+        </div>
         </div>
       </div>
     </footer>
