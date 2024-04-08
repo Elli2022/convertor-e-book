@@ -35,6 +35,11 @@ const WeAreDoersSection = () => {
           </p>
         </div>
       </section>
+         {/* Container Div för horisontell linje */}
+      <div className="w-full bg-[#15253E] flex justify-center py-2">
+        <div className="border-t border-gray-300 w-11/12" style={{ borderWidth: '1px' }}></div>
+      </div>
+
     </>
   );
 };
