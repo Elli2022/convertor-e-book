@@ -12,42 +12,42 @@ const Footer = () => {
       >
         <a
           href="https://convertor.se/tjanster/"
-          className="hover:underline"
+          className="hover:underline no-cursor-pointer"
           style={{ color: "white", wordWrap: "break-word" }}
         >
           Tjänster
         </a>
         <a
           href="https://convertor.se/kundcase/"
-          className="hover:underline"
+          className="hover:underline no-cursor-pointer"
           style={{ color: "white", wordWrap: "break-word" }}
         >
           Case
         </a>
         <a
           href="https://convertor.se/greenhouse/"
-          className="hover:underline"
+          className="hover:underline no-cursor-pointer"
           style={{ color: "white", wordWrap: "break-word" }}
         >
           Greenhouse
         </a>
         <a
           href="https://convertor.se/insikt/"
-          className="hover:underline"
+          className="hover:underline no-cursor-pointer"
           style={{ color: "white", wordWrap: "break-word" }}
         >
           Insikt
         </a>
         <a
           href="https://convertor.se/karriar/"
-          className="hover:underline"
+          className="hover:underline no-cursor-pointer"
           style={{ color: "white", wordWrap: "break-word" }}
         >
           Karriär
         </a>
         <a
           href="https://convertor.se/kontakt/"
-          className="hover:underline"
+          className="hover:underline no-cursor-pointer"
           style={{ color: "white", wordWrap: "break-word" }}
         >
           Kontakt
@@ -77,7 +77,7 @@ const Footer = () => {
         <div>
           <a
             href="https://convertor.se/"
-            className="lg:inline-block lg:mx-0 mx-auto"
+            className="lg:inline-block lg:mx-0 mx-auto no-cursor-pointer"
           >
             <img
               src="/images/convertorLogo.png"
@@ -91,12 +91,12 @@ const Footer = () => {
               <a
                 href="https://www.facebook.com/convertorsverige?locale=sv_SE"
                 aria-label="Facebook"
-                className="hover:opacity-75"
+                className="hover:opacity-75 no-cursor-pointer"
               >
                 <img
                   src="/images/Link_1.svg"
                   alt="Facebook"
-                  className="h-6 w-6 sm:h-8 sm:w-8"
+                  className="h-6 w-6 sm:h-8 sm:w-8 no-cursor-pointer"
                 />
               </a>
               <a
@@ -107,18 +107,18 @@ const Footer = () => {
                 <img
                   src="/images/Link_2.svg"
                   alt="LinkedIn"
-                  className="h-6 w-6 sm:h-8 sm:w-8"
+                  className="h-6 w-6 sm:h-8 sm:w-8 no-cursor-pointer"
                 />
               </a>
               <a
                 href="https://www.instagram.com/convertor_malmo/"
                 aria-label="Instagram"
-                className="hover:opacity-75"
+                className="hover:opacity-75 no-cursor-pointer"
               >
                 <img
                   src="/images/Link_3.svg"
                   alt="Instagram"
-                  className="h-6 w-6 sm:h-8 sm:w-8"
+                  className="h-6 w-6 sm:h-8 sm:w-8 no-cursor-pointer"
                 />
               </a>
             </div>
@@ -130,14 +130,14 @@ const Footer = () => {
               <span className="mx-1">Läs vår</span>
               <a
                 href="https://convertor.se/integritetspolicy/"
-                className="hover:underline text-[rgba(255,255,255,0.80)]"
+                className="hover:underline text-[rgba(255,255,255,0.80)] no-cursor-pointer"
               >
                 Integritetspolicy
               </a>
               <span className="mx-1">|</span>
               <a
                 href="https://convertor.se/#!"
-                className="hover:underline text-[rgba(255,255,255,0.80)]"
+                className="hover:underline text-[rgba(255,255,255,0.80)] no-cursor-pointer"
               >
                 Ändra dina inställningar
               </a>

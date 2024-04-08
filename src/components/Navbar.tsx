@@ -21,7 +21,7 @@ const Navbar = () => {
         <nav className="bg-white py-4 w-full flex justify-between items-center px-4 lg:px-8">
             {/* Logo */}
             <a href="https://convertor.se/">
-            <img src="/images/convertor-logo.svg" alt="Convertor Logo" className="h-8 w-auto"/>
+            <img src="/images/convertor-logo.svg" alt="Convertor Logo" className="h-8 w-auto no-cursor-pointer"/>
             </a>
             
             {/* Hamburger Menu Button */}
@@ -32,12 +32,12 @@ const Navbar = () => {
 
             {/* Desktop Menu Items - Aligned to the right */}
             <div className="hidden lg:flex lg:flex-grow lg:justify-end items-center space-x-4">
-                <a href="https://convertor.se/" className="text-custom-blue font-century-gothic-pro uppercase text-xs font-bold leading-tight hover:text-gray-300 py-2 px-3">TJÄNSTER</a>
-                <a href="https://convertor.se/kundcase/" className="text-custom-blue font-century-gothic-pro uppercase text-xs font-bold leading-tight hover:text-gray-300 py-2 px-3">CASE</a>
-                <a href="https://convertor.se/greenhouse/" className="text-custom-blue font-century-gothic-pro uppercase text-xs font-bold leading-tight hover:text-gray-300 py-2 px-3">GREENHOUSE</a>
-                <a href="https://convertor.se/insikt/" className="text-custom-blue font-century-gothic-pro uppercase text-xs font-bold leading-tight hover:text-gray-300 py-2 px-3">INSIKT</a>
-                <a href="https://convertor.se/karriar/" className="text-custom-blue font-century-gothic-pro uppercase text-xs font-bold leading-tight hover:text-gray-300 py-2 px-3">KARRIÄR</a>
-                <a href="https://convertor.se/kontakt/" className="text-custom-blue font-century-gothic-pro uppercase text-xs font-bold leading-tight hover:text-gray-300 py-2 px-3">KONTAKT</a>
+                <a href="https://convertor.se/" className="no-cursor-pointer text-custom-blue font-century-gothic-pro uppercase text-xs font-bold leading-tight hover:text-gray-300 py-2 px-3">TJÄNSTER</a>
+                <a href="https://convertor.se/kundcase/" className="no-cursor-pointer text-custom-blue font-century-gothic-pro uppercase text-xs font-bold leading-tight hover:text-gray-300 py-2 px-3">CASE</a>
+                <a href="https://convertor.se/greenhouse/" className="no-cursor-pointer text-custom-blue font-century-gothic-pro uppercase text-xs font-bold leading-tight hover:text-gray-300 py-2 px-3">GREENHOUSE</a>
+                <a href="https://convertor.se/insikt/" className="no-cursor-pointer text-custom-blue font-century-gothic-pro uppercase text-xs font-bold leading-tight hover:text-gray-300 py-2 px-3">INSIKT</a>
+                <a href="https://convertor.se/karriar/" className="no-cursor-pointer text-custom-blue font-century-gothic-pro uppercase text-xs font-bold leading-tight hover:text-gray-300 py-2 px-3">KARRIÄR</a>
+                <a href="https://convertor.se/kontakt/" className="no-cursor-pointer text-custom-blue font-century-gothic-pro uppercase text-xs font-bold leading-tight hover:text-gray-300 py-2 px-3">KONTAKT</a>
             </div>
 
             {/* Modal for Mobile Menu */}

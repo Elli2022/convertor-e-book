@@ -32,3 +32,18 @@ body {
     text-wrap: balance;
   }
 }
+
+
+/* globals.css */
+.no-cursor {
+  cursor: none;
+}
+
+.no-cursor:hover {
+  cursor: none;
+}
+
+/* styles.css */
+.no-cursor-pointer:hover {
+  cursor: none;
+}
