@@ -41,50 +41,50 @@ const MenuModal = ({
         {/* Menu Items */}
         <li className="menu-item menu-item-has-children ">
           <ul className="sub-menu">
-            <li className="menu-item mb-4">
+            <li className="menu-item mb-3">
               <a
                 href="https://convertor.se/"
-                className="text-white font-semibold text-sm leading-loose w-full text-center py-2"
+                className="text-white font-font-medium text-sm leading-loose w-full text-center py-2"
                 >
                 TJÄNSTER
               </a>
             </li>
-            <li className="menu-item mb-4">
+            <li className="menu-item mb-3">
               <a
                 href="https://convertor.se/kundcase/"
-                className="text-white font-semibold text-sm leading-loose w-full text-center py-2"
+                className="text-white font-medium text-sm leading-loose w-full text-center py-2"
               >
                 CASE
               </a>
             </li>
-            <li className="menu-item mb-4">
+            <li className="menu-item mb-3">
               <a
                 href="https://convertor.se/greenhouse/"
-                className="text-white font-semibold text-sm leading-loose w-full text-center py-2"
+                className="text-white font-medium text-sm leading-loose w-full text-center py-2"
               >
                 GREENHOUSE
               </a>
             </li>
-            <li className="menu-item mb-4">
+            <li className="menu-item mb-3">
               <a
                 href="https://convertor.se/insikt/"
-                className="text-white font-semibold text-sm leading-loose w-full text-center py-2"
+                className="text-white font-medium text-sm leading-loose w-full text-center py-2"
               >
                 INSIKT
               </a>
             </li>
-            <li className="menu-item mb-4">
+            <li className="menu-item mb-3">
               <a
                 href="https://convertor.se/karriar/"
-                className="text-white font-semibold text-sm leading-loose w-full text-center py-2"
+                className="text-white font-medium text-sm leading-loose w-full text-center py-2"
               >
                 KARRIÄR
               </a>
             </li>
-            <li className="menu-item">
+            <li className="menu-item mb-3">
               <a
                 href="https://convertor.se/kontakt/"
-                className="text-white font-semibold text-sm leading-loose w-full text-center py-2"
+                className="text-white font-medium text-sm leading-loose w-full text-center py-2"
               >
                 KONTAKT
               </a>
