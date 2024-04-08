@@ -11,7 +11,7 @@ const MenuModal = ({
 
   return (
     <div
-    className="fixed inset-0 z-50 bg-[#14243DE6]/40 p-5 flex flex-col items-center justify-center"
+    className="fixed inset-0 z-50 bg-[#14243DE6]/30 p-5 flex flex-col items-center justify-center"
 
     onClick={onClose}
     >
@@ -40,11 +40,11 @@ const MenuModal = ({
       >
         {/* Menu Items */}
         <li className="menu-item menu-item-has-children ">
-          <ul className="sub-menu">
+          <ul className="sub-menu cursor-pointer">
             <li className="menu-item mb-3">
               <a
                 href="https://convertor.se/"
-                className="text-white font-font-medium text-sm leading-loose w-full text-center py-2"
+                className="text-white font-font-medium text-sm leading-loose w-full text-center py-2 "
                 >
                 TJÄNSTER
               </a>
