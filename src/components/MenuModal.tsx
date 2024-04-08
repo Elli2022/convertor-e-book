@@ -7,6 +7,8 @@ const MenuModal = ({
   isOpen: boolean;
   onClose: () => void;
 }) => {
+
+  
   if (!isOpen) return null;
 
   return (
@@ -15,14 +17,15 @@ const MenuModal = ({
 
     onClick={onClose}
     >
-      {/* Close Icon */}
-      <button
-        className="absolute top-5 right-5 text-white text-3xl z-10"
-        onClick={onClose}
-        aria-label="Close menu"
-      >
-        &times;
-      </button>
+          {/* Close Icon */}
+<button
+  className="absolute top-1 right-5 text-white z-10"
+  onClick={onClose}
+  aria-label="Close menu"
+  style={{ fontSize: "64px" }} 
+>
+  &times;
+</button>
 
       {/* Menu Content */}
       <ul
