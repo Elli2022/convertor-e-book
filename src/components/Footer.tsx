@@ -85,10 +85,9 @@ const Footer = () => {
               className="mx-auto h-10 sm:h-9 md:h-8 lg:h-6 xl:h-8 mb-12 mt-12"
             />
           </a>{" "}
-          {/* Wrapper to control layout */}
-          <div className="container mx-auto flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
-            {/* Social media icons - Placed first for small screens, but visually moves to the right on larger screens */}
-            <div className="flex justify-center gap-4 lg:order-last">
+          <div className="container mx-auto flex flex-col lg:flex-row lg:justify-between items-center space-y-4 lg:space-y-0 lg:space-x-4">
+            {/* Sociala medieikoner - Placerade först för små skärmar, men visuellt flyttas till höger på större skärmar */}
+            <div className="flex justify-center gap-4 lg:order-last lg:ml- lg:ml-120"> {/* Adjusted margin here */}
               <a
                 href="https://www.facebook.com/convertorsverige?locale=sv_SE"
                 aria-label="Facebook"
@@ -124,8 +123,8 @@ const Footer = () => {
               </a>
             </div>
 
-            {/* Text section - Stays on top for small screens due to natural HTML flow, moves to the left on larger screens */}
-            <p className="text-[13px] sm:text-[15px] lg:text-[16px] font-light text-[rgba(255,255,255,0.5)] lg:flex-grow">
+            {/* Textsektion */}
+            <p className="lg:order-2 lg:flex-grow text-[13px] sm:text-[15px] lg:text-[16px] font-light text-[rgba(255,255,255,0.5)] lg:text-right">
               Alla rättigheter reserverade © 2023 {" | "}
               <span className="mx-1">Läs vår</span>
               <a
