@@ -123,6 +123,7 @@ const Footer = () => {
               </a>
             </div>
 
+
             {/* Textsektion */}
             <p className="lg:order-2 lg:flex-grow text-[13px] sm:text-[15px] lg:text-[16px] font-light text-[rgba(255,255,255,0.5)] lg:text-right">
               Alla rättigheter reserverade © 2023 {" | "}
