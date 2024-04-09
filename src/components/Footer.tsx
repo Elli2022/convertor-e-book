@@ -57,10 +57,9 @@ const Footer = () => {
       <div>
         {/* Contact Information */}
         <div
-          className="flex flex-wrap justify-center space-x-2 sm:space-x-4 md:space-x-12 lg:space-x-8 xl:space-x-10 2xl:space-x-30 mb-8 text-sm sm:text-base md:text-lg lg:text-xl text-left gap-12 mb-20 mt-12"
+          className="flex flex-wrap justify-center space-x-2 sm:space-x-4 md:space-x-12 lg:space-x-8 xl:space-x-10 2xl:space-x-30 mb-8 text-sm sm:text-base md:text-lg lg:text-xl text-left gap-12 mb-20 mt-12 font-extralight"
           style={{
             fontFamily: "Helvetica Neue",
-            fontWeight: 300,
             lineHeight: "20px",
           }}
         >
@@ -122,7 +121,7 @@ const Footer = () => {
                 />
               </a>
             </div>
-
+          <div>
             {/* Textsektion */}
             <p className="lg:order-2 lg:flex-grow text-[13px] sm:text-[15px] lg:text-[16px] font-light text-[rgba(255,255,255,0.5)] lg:text-right lg:ml-4">
               {" "}
@@ -143,6 +142,7 @@ const Footer = () => {
                 Ändra dina inställningar
               </a>
             </p>
+          </div>
           </div>
         </div>
       </div>
