@@ -7,14 +7,12 @@ import PrestigelessSection from "@/components/PrestigelessSection";
 import ResultOrientedSection from "@/components/ResultOrientedSection";
 import WeAreDoersSection from "@/components/WeAreDoersSection";
 import Footer from "@/components/Footer";
-import CustomCursor from "@/components/CustomCursor";
+
 
 export default function Home() {
   return (
-    <div style={{ cursor: "none" }}>
-      {" "}
-      {/* Inline style för att dölja cursor */}
-      <CustomCursor />
+
+    
       <main className="flex min-h-screen flex-col items-center">
         <Navbar />
         <WelcomeSection />
@@ -24,6 +22,6 @@ export default function Home() {
         <WeAreDoersSection />
         <Footer />
       </main>
-    </div>
+  
   );
 }

@@ -19,7 +19,7 @@ const MenuModal = ({
     >
           {/* Close Icon */}
 <button
-  className="absolute top-1 right-5 text-white z-10"
+  className="absolute top-1 right-5 text-white z-10 no-cursor-pointer"
   onClick={onClose}
   aria-label="Close menu"
   style={{ fontSize: "64px" }} 

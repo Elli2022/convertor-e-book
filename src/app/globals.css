@@ -24,7 +24,7 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
-    @apply cursor-none;
+
 }
 
 @layer utilities {
@@ -34,19 +34,6 @@ body {
 }
 
 
-/* globals.css */
-.no-cursor {
-  cursor: none;
-}
-
-.no-cursor:hover {
-  cursor: none;
-}
-
-/* styles.css */
-.no-cursor-pointer:hover {
-  cursor: none;
-}
 
 
 @keyframes wave-animation {
