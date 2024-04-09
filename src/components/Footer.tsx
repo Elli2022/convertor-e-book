@@ -85,8 +85,9 @@ const Footer = () => {
             />
           </a>{" "}
           <div className="container mx-auto flex flex-col lg:flex-row lg:justify-between items-center space-y-4 lg:space-y-0 lg:space-x-4">
+
             {/* Sociala medieikoner - Placerade först för små skärmar, men visuellt flyttas till höger på större skärmar */}
-            <div className="flex justify-center lg:justify-end gap-4 lg:order-last lg:ml-auto">
+            <div className="flex justify-center lg:justify-end gap-4 lg:order-last lg:ml-auto pl-4">
               <a
                 href="https://www.facebook.com/convertorsverige?locale=sv_SE"
                 aria-label="Facebook"
@@ -136,7 +137,7 @@ const Footer = () => {
               </a>
               <span className="mx-1">|</span>
               <a
-                href="https://convertor.se/#!"
+                href="https://convertor.se/integritetspolicy/#!"
                 className="hover:underline text-[rgba(255,255,255,0.80)] no-cursor-pointer"
               >
                 Ändra dina inställningar

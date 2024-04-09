@@ -82,7 +82,12 @@ const WelcomeSection = () => {
           <div className="mt-2 text-lg md:text-xl lg:text-3xl font-bold font-century-gothic-pro text-black">en byrå fylld av passionerade,</div>
           {/* Uppdaterad textfärg baserad på ellipsens position och skala */}
           <div className={`text-lg md:text-xl lg:text-3xl font-bold font-century-gothic-pro`} style={{ color: textColor }}>
-            prestigelösa och resultatdrivna doers.
+          {checkIfEllipsisCoversText()? (
+            <span style={{ color: 'black' }}>prestigelösa och </span>
+          ) : (
+            <span style={{ color: 'black' }}>prestigelösa och </span>
+          )}
+          resultatdrivna doers.
           </div>
         </div>
       </section>
