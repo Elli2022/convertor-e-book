@@ -4,52 +4,61 @@ import React, { useEffect, useState } from 'react';
 const WelcomeSection = () => {
   const scaleStart = 0.5; // Start scale
   const scaleEnd = 2.5; // End scale
-  const translateYStart = 0; // Initial translateY position
-  const scaleIncreaseRate = 0.01; // Increased rate of scaling per pixel scrolled to make it more sensitive
+  const translateYStart = 0; // Initial translateY position (not used for movement, just as a placeholder)
+  const scaleIncreaseRate = 0.01; // Increased rate of scaling per pixel scrolled
   const [scale, setScale] = useState(scaleStart);
-  const [isFullScale, setIsFullScale] = useState(false); // Tracks whether full scale has been reached
+  const [isFullScale, setIsFullScale] = useState(false); // Tracks if full scaling is achieved
+  const [scrollPosition, setScrollPosition] = useState(0); // Track the scroll position to determine if we are at the top
 
-  // Updated state for text color
-  const [textColor, setTextColor] = useState('#32ABBC');
+  const [textColor, setTextColor] = useState('#32ABBC'); // State for text color
 
   const handleScroll = (event:any) => {
-    const scrollDelta = Math.abs(event.deltaY);
+    const scrollDelta = event.deltaY;
     const scrollDown = event.deltaY > 0;
 
     if (scrollDown) {
       if (!isFullScale) {
-        event.preventDefault(); // Prevent actual scrolling
-        const scaleChange = scaleIncreaseRate * scrollDelta; // Calculate scale change based on scroll intensity
-        const newScale = Math.min(scale + scaleChange, scaleEnd);
+        event.preventDefault(); // Prevent page scrolling
+        const newScale = Math.min(scale + scaleIncreaseRate * Math.abs(scrollDelta), scaleEnd);
         setScale(newScale);
-        if (newScale >= scaleEnd) {
-          setIsFullScale(true); // Allow natural scrolling when full scale is reached
+        if (newScale === scaleEnd) {
+          setIsFullScale(true); // Enable scrolling only after reaching full scale
         }
       }
-    } else if (scale > scaleStart) {
-      event.preventDefault(); // Prevent actual scrolling when scaling down
-      const scaleChange = scaleIncreaseRate * scrollDelta;
-      const newScale = Math.max(scaleStart, scale - scaleChange);
-      setScale(newScale);
-      if (newScale <= scaleStart) {
-        setIsFullScale(false); // Allow scaling up again when scale reaches the start
+    } else {
+      if (window.scrollY === 0) {
+        event.preventDefault(); // Prevent scrolling up at the top of the page
+        const newScale = Math.max(scaleStart, scale - scaleIncreaseRate * Math.abs(scrollDelta));
+        setScale(newScale);
+        if (newScale === scaleStart) {
+          setIsFullScale(false); // Re-enable scaling up when scaled back to start
+        }
       }
     }
   };
 
   useEffect(() => {
+    const updateScrollPosition = () => {
+      setScrollPosition(window.scrollY);
+    };
+
     window.addEventListener('wheel', handleScroll, { passive: false });
+    window.addEventListener('scroll', updateScrollPosition);
+
     return () => {
       window.removeEventListener('wheel', handleScroll);
+      window.removeEventListener('scroll', updateScrollPosition);
     };
-  }, [scale, isFullScale]); // React to changes in scale and isFullScale
+  }, [scale, isFullScale]);
 
   const ellipsisStyle = {
-    transform: `scale(${scale}) translateY(${translateYStart}px)`, // Keep translateY static
+    transform: `scale(${scale}) translateY(${translateYStart}px)`,
+    transition: 'transform 0.5s ease-out' // Smooth scaling transitions
   };
 
   useEffect(() => {
-    setTextColor(scale > 1.2 ? 'white' : '#32ABBC');
+    const coversText = scale > 1.2; // Adjust text color based on scale
+    setTextColor(coversText ? 'white' : '#32ABBC');
   }, [scale]);
 
   return (
@@ -70,4 +79,3 @@ const WelcomeSection = () => {
 };
 
 export default WelcomeSection;
-
