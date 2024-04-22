@@ -4,50 +4,49 @@ import React, { useEffect, useState } from 'react';
 const WelcomeSection = () => {
   const scaleStart = 0.5; // Start scale
   const scaleEnd = 2.5; // End scale
-  const translateYStart = 0; // Initial translateY position (not used for movement, just as a placeholder)
+  const translateYStart = 0; // Initial translateY position
   const scaleIncreaseRate = 0.01; // Increased rate of scaling per pixel scrolled
   const [scale, setScale] = useState(scaleStart);
   const [isFullScale, setIsFullScale] = useState(false); // Tracks if full scaling is achieved
-  const [scrollPosition, setScrollPosition] = useState(0); // Track the scroll position to determine if we are at the top
 
   const [textColor, setTextColor] = useState('#32ABBC'); // State for text color
 
   const handleScroll = (event:any) => {
-    const scrollDelta = event.deltaY;
+    const scrollDelta = Math.abs(event.deltaY);
     const scrollDown = event.deltaY > 0;
 
     if (scrollDown) {
       if (!isFullScale) {
         event.preventDefault(); // Prevent page scrolling
-        const newScale = Math.min(scale + scaleIncreaseRate * Math.abs(scrollDelta), scaleEnd);
-        setScale(newScale);
-        if (newScale === scaleEnd) {
-          setIsFullScale(true); // Enable scrolling only after reaching full scale
+        let newScale = scale + scaleIncreaseRate * scrollDelta;
+        if (newScale >= scaleEnd) {
+          newScale = scaleEnd;
+          setScale(newScale);
+          // Introduce a shorter delay before allowing natural scrolling
+          setTimeout(() => {
+            setIsFullScale(true);
+          }, 500); // Delay in milliseconds, adjust as needed
+        } else {
+          setScale(newScale);
         }
       }
     } else {
       if (window.scrollY === 0) {
-        event.preventDefault(); // Prevent scrolling up at the top of the page
-        const newScale = Math.max(scaleStart, scale - scaleIncreaseRate * Math.abs(scrollDelta));
-        setScale(newScale);
-        if (newScale === scaleStart) {
+        event.preventDefault(); // Prevent scrolling up at the top of the page if not full scaled
+        let newScale = scale - scaleIncreaseRate * scrollDelta;
+        if (newScale <= scaleStart) {
+          newScale = scaleStart;
           setIsFullScale(false); // Re-enable scaling up when scaled back to start
         }
+        setScale(newScale);
       }
     }
   };
 
   useEffect(() => {
-    const updateScrollPosition = () => {
-      setScrollPosition(window.scrollY);
-    };
-
     window.addEventListener('wheel', handleScroll, { passive: false });
-    window.addEventListener('scroll', updateScrollPosition);
-
     return () => {
       window.removeEventListener('wheel', handleScroll);
-      window.removeEventListener('scroll', updateScrollPosition);
     };
   }, [scale, isFullScale]);
 
