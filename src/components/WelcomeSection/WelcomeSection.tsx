@@ -27,29 +27,9 @@ const WelcomeSection = () => {
         }
       } else {
         // Flytta neråt efter full skala
-        setTranslateY(prevY => prevY + event.deltaY);
-      }
-    } else {
-      // När vi scrollar uppåt
-      if (translateY > translateYStart) {
-      
-        // Rör sig uppåt till startpositionen
-        const newY = Math.max(translateYStart, translateY - Math.abs(event.deltaY));
-        setTranslateY(newY);
-        if (newY === translateYStart && scale === scaleEnd) {
-          // Börja minska storleken när den når startpositionen och är fullskalig
-          setIsFullScale(false);
-        }
-      } else if (scale > scaleStart) {
        
-        // Minska storleken till startskalan
-        const newScale = Math.max(scaleStart, scale - scaleIncreaseRate * Math.abs(event.deltaY));
-        setScale(newScale);
-        if (newScale === scaleStart) {
-          // Återställ flaggor om nödvändigt
-        }
       }
-    }
+    } 
   };
 
   const checkIfEllipsisCoversText = () => {
