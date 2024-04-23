@@ -2,24 +2,27 @@
 import React, { useEffect, useState } from 'react';
 
 const WelcomeSection = () => {
-  const scaleStart = 0.5; // Start scale
-  const scaleEnd = 2.5; // End scale
-  const translateYStart = 0; // Initial translateY position
+  const scaleStart = 0.5;  // Start scale
+  const scaleEnd = 2.5;    // End scale
+  const translateYStart = 0; // Initial translateY position (unused)
   const scaleIncreaseRate = 0.01; // Increased rate of scaling per pixel scrolled
   const [scale, setScale] = useState(scaleStart);
-  const [isFullScale, setIsFullScale] = useState(false); // Tracks if full scaling is achieved
-  const [lastTouch, setLastTouch] = useState(0); // Track last touch position
-
+  const [isFullScale, setIsFullScale] = useState(false);
+  const [lastTouchY, setLastTouchY] = useState(0);
   const [textColor, setTextColor] = useState('#32ABBC'); // State for text color
 
-  const handleScroll = (event:any) => {
-    const isTouch = event.type.includes('touch');
-    let scrollDelta;
+  const handleTouchStart = (event:any) => {
+    setLastTouchY(event.touches[0].clientY);
+  };
 
+  const handleScroll = (event:any) => {
+    let scrollDelta = 0;
+    const isTouch = event.type === 'touchmove';
+    
     if (isTouch) {
-      const touchY = event.touches[0].clientY;
-      scrollDelta = lastTouch - touchY;
-      setLastTouch(touchY);
+      const currentTouchY = event.touches[0].clientY;
+      scrollDelta = lastTouchY - currentTouchY;
+      setLastTouchY(currentTouchY);
     } else {
       scrollDelta = event.deltaY;
     }
@@ -28,32 +31,26 @@ const WelcomeSection = () => {
 
     if (scrollDown) {
       if (!isFullScale) {
-        event.preventDefault(); // Prevent page scrolling
+        event.preventDefault();
         const newScale = Math.min(scale + scaleIncreaseRate * Math.abs(scrollDelta), scaleEnd);
         setScale(newScale);
         if (newScale >= scaleEnd) {
-          setTimeout(() => {
-            setIsFullScale(true); // Enable scrolling only after reaching full scale
-          }, 500);
+          setTimeout(() => setIsFullScale(true), 500);
         }
       }
     } else {
-      if (window.scrollY === 0 || !isFullScale) {
-        event.preventDefault(); // Prevent scrolling up when not full scaled or at top of the page
+      if (!isFullScale || window.scrollY === 0) {
+        event.preventDefault();
         const newScale = Math.max(scaleStart, scale - scaleIncreaseRate * Math.abs(scrollDelta));
         setScale(newScale);
         if (newScale <= scaleStart) {
-          setIsFullScale(false); // Allow re-scaling up when scaled back to start
+          setIsFullScale(false);
         }
       }
     }
   };
 
   useEffect(() => {
-    const handleTouchStart = (event:any) => {
-      setLastTouch(event.touches[0].clientY);
-    };
-
     window.addEventListener('wheel', handleScroll, { passive: false });
     window.addEventListener('touchmove', handleScroll, { passive: false });
     window.addEventListener('touchstart', handleTouchStart, { passive: false });
@@ -67,7 +64,7 @@ const WelcomeSection = () => {
 
   const ellipsisStyle = {
     transform: `scale(${scale}) translateY(${translateYStart}px)`,
-    transition: 'transform 0.5s ease-out' // Smooth scaling transitions
+    transition: 'transform 0.5s ease-out',
   };
 
   useEffect(() => {
