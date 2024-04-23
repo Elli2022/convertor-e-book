@@ -8,45 +8,60 @@ const WelcomeSection = () => {
   const scaleIncreaseRate = 0.01; // Increased rate of scaling per pixel scrolled
   const [scale, setScale] = useState(scaleStart);
   const [isFullScale, setIsFullScale] = useState(false); // Tracks if full scaling is achieved
+  const [lastTouch, setLastTouch] = useState(0); // Track last touch position
 
   const [textColor, setTextColor] = useState('#32ABBC'); // State for text color
 
   const handleScroll = (event:any) => {
-    const scrollDelta = Math.abs(event.deltaY);
-    const scrollDown = event.deltaY > 0;
+    const isTouch = event.type.includes('touch');
+    let scrollDelta;
+
+    if (isTouch) {
+      const touchY = event.touches[0].clientY;
+      scrollDelta = lastTouch - touchY;
+      setLastTouch(touchY);
+    } else {
+      scrollDelta = event.deltaY;
+    }
+
+    const scrollDown = scrollDelta > 0;
 
     if (scrollDown) {
       if (!isFullScale) {
         event.preventDefault(); // Prevent page scrolling
-        let newScale = scale + scaleIncreaseRate * scrollDelta;
+        const newScale = Math.min(scale + scaleIncreaseRate * Math.abs(scrollDelta), scaleEnd);
+        setScale(newScale);
         if (newScale >= scaleEnd) {
-          newScale = scaleEnd;
-          setScale(newScale);
-          // Introduce a shorter delay before allowing natural scrolling
           setTimeout(() => {
-            setIsFullScale(true);
-          }, 500); // Delay in milliseconds, adjust as needed
-        } else {
-          setScale(newScale);
+            setIsFullScale(true); // Enable scrolling only after reaching full scale
+          }, 500);
         }
       }
     } else {
-      if (window.scrollY === 0) {
-        event.preventDefault(); // Prevent scrolling up at the top of the page if not full scaled
-        let newScale = scale - scaleIncreaseRate * scrollDelta;
-        if (newScale <= scaleStart) {
-          newScale = scaleStart;
-          setIsFullScale(false); // Re-enable scaling up when scaled back to start
-        }
+      if (window.scrollY === 0 || !isFullScale) {
+        event.preventDefault(); // Prevent scrolling up when not full scaled or at top of the page
+        const newScale = Math.max(scaleStart, scale - scaleIncreaseRate * Math.abs(scrollDelta));
         setScale(newScale);
+        if (newScale <= scaleStart) {
+          setIsFullScale(false); // Allow re-scaling up when scaled back to start
+        }
       }
     }
   };
 
   useEffect(() => {
+    const handleTouchStart = (event:any) => {
+      setLastTouch(event.touches[0].clientY);
+    };
+
     window.addEventListener('wheel', handleScroll, { passive: false });
+    window.addEventListener('touchmove', handleScroll, { passive: false });
+    window.addEventListener('touchstart', handleTouchStart, { passive: false });
+
     return () => {
       window.removeEventListener('wheel', handleScroll);
+      window.removeEventListener('touchmove', handleScroll);
+      window.removeEventListener('touchstart', handleTouchStart);
     };
   }, [scale, isFullScale]);
 
