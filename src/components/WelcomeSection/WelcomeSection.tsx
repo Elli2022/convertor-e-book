@@ -11,11 +11,11 @@ const WelcomeSection = () => {
   const [lastTouchY, setLastTouchY] = useState(0);
   const [textColor, setTextColor] = useState('#32ABBC'); // Initialized state for text color
 
-  const handleTouchStart = (event) => {
+  const handleTouchStart = (event:any) => {
     setLastTouchY(event.touches[0].clientY); // Initialize the touch position
   };
 
-  const handleScroll = (event) => {
+  const handleScroll = (event:any) => {
     const isTouch = event.type === 'touchmove';
     let scrollDelta = 0;
 
