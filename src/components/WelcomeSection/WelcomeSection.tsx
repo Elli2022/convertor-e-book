@@ -2,50 +2,47 @@
 import React, { useEffect, useState } from 'react';
 
 const WelcomeSection = () => {
-  const scaleStart = 0.5;  // Start scale
-  const scaleEnd = 2.5;    // End scale
-  const translateYStart = 0; // Initial translateY position (unused)
-  const scaleIncreaseRate = 0.01; // Increased rate of scaling per pixel scrolled
+  const scaleStart = 0.5; // Start scale
+  const scaleEnd = 2.5; // End scale
+  const translateYStart = 0; // Initial translateY position
+  const scaleIncreaseRate = 0.01; // Scale rate per pixel of scroll
   const [scale, setScale] = useState(scaleStart);
   const [isFullScale, setIsFullScale] = useState(false);
   const [lastTouchY, setLastTouchY] = useState(0);
-  const [textColor, setTextColor] = useState('#32ABBC'); // State for text color
 
   const handleTouchStart = (event:any) => {
-    setLastTouchY(event.touches[0].clientY);
+    setLastTouchY(event.touches[0].clientY); // Record the position of the first touch
   };
 
   const handleScroll = (event:any) => {
-    let scrollDelta = 0;
+    let scrollDelta;
     const isTouch = event.type === 'touchmove';
-    
+
     if (isTouch) {
-      const currentTouchY = event.touches[0].clientY;
-      scrollDelta = lastTouchY - currentTouchY;
-      setLastTouchY(currentTouchY);
+      const touchY = event.touches[0].clientY;
+      scrollDelta = lastTouchY - touchY; // Calculate the distance moved since last event
+      setLastTouchY(touchY); // Update the last known touch position
     } else {
-      scrollDelta = event.deltaY;
+      scrollDelta = event.deltaY; // Use deltaY for wheel events
     }
 
-    const scrollDown = scrollDelta > 0;
+    const scrollDown = scrollDelta > 0; // Determine the direction of the scroll
 
     if (scrollDown) {
       if (!isFullScale) {
-        event.preventDefault();
+        event.preventDefault(); // Prevent the page from scrolling down
         const newScale = Math.min(scale + scaleIncreaseRate * Math.abs(scrollDelta), scaleEnd);
         setScale(newScale);
-        if (newScale >= scaleEnd) {
-          setTimeout(() => setIsFullScale(true), 500);
+        if (newScale === scaleEnd) {
+          setTimeout(() => setIsFullScale(true), 500); // Allow scrolling after a delay once full scale is reached
         }
       }
-    } else {
-      if (!isFullScale || window.scrollY === 0) {
-        event.preventDefault();
-        const newScale = Math.max(scaleStart, scale - scaleIncreaseRate * Math.abs(scrollDelta));
-        setScale(newScale);
-        if (newScale <= scaleStart) {
-          setIsFullScale(false);
-        }
+    } else if (window.scrollY === 0 || !isFullScale) {
+      event.preventDefault(); // Prevent the page from scrolling up
+      const newScale = Math.max(scaleStart, scale - scaleIncreaseRate * Math.abs(scrollDelta));
+      setScale(newScale);
+      if (newScale === scaleStart) {
+        setIsFullScale(false); // Reset the full scale state when scaled back to the start
       }
     }
   };
@@ -60,17 +57,12 @@ const WelcomeSection = () => {
       window.removeEventListener('touchmove', handleScroll);
       window.removeEventListener('touchstart', handleTouchStart);
     };
-  }, [scale, isFullScale]);
+  }, [scale, isFullScale]); // Re-run the effect when scale or isFullScale changes
 
   const ellipsisStyle = {
-    transform: `scale(${scale}) translateY(${translateYStart}px)`,
-    transition: 'transform 0.5s ease-out',
+    transform: `scale(${scale})`,
+    transition: 'transform 0.5s ease-out', // Smooth transition for scaling
   };
-
-  useEffect(() => {
-    const coversText = scale > 1.2; // Adjust text color based on scale
-    setTextColor(coversText ? 'white' : '#32ABBC');
-  }, [scale]);
 
   return (
     <>
@@ -79,7 +71,7 @@ const WelcomeSection = () => {
         <div className="z-10 relative max-w-4xl mx-auto px-4">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold font-century-gothic-pro text-black">Välkommen till</h1>
           <div className="mt-2 text-lg md:text-xl lg:text-3xl font-bold font-century-gothic-pro text-black">en byrå fylld av passionerade,</div>
-          <div className={`text-lg md:text-xl lg:text-3xl font-bold font-century-gothic-pro`} style={{ color: textColor }}>
+          <div className={`text-lg md:text-xl lg:text-3xl font-bold font-century-gothic-pro`} style={{ color: '#32ABBC' }}>
             <span style={{ color: 'black' }}>prestigelösa och </span>
             resultatdrivna doers.
           </div>
