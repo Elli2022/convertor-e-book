@@ -1,89 +1,79 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 
-const WelcomeSection = () => {
-  const scaleStart = 0.5;  // Start scale
-  const scaleEnd = 2.5;    // End scale
-  const translateYStart = 0; // Initial translateY position
-  const scaleIncreaseRate = 0.01; // Increased rate of scaling per pixel scrolled
-  const [scale, setScale] = useState(scaleStart);
-  const [isFullScale, setIsFullScale] = useState(false);
-  const [lastTouchY, setLastTouchY] = useState(0);
-  const [textColor, setTextColor] = useState('#32ABBC'); // Initialized state for text color
+const WelcomeSection: React.FC = () => {
+  const scaleStart = 0.5;
+  const scaleEnd = 2.5;
+  const translateYStart = 0;
+  const scaleIncreaseRate = 0.01;
 
-  const handleTouchStart = (event:any) => {
-    setLastTouchY(event.touches[0].clientY); // Initialize the touch position
-  };
+  const [scale, setScale] = useState<number>(scaleStart);
+  const [isFullScale, setIsFullScale] = useState<boolean>(false);
+  const [textColor, setTextColor] = useState<string>('#32ABBC');
 
-  const handleScroll = (event:any) => {
-    const isTouch = event.type === 'touchmove';
-    let scrollDelta = 0;
-
-    if (isTouch) {
-      const touchY = event.touches[0].clientY;
-      scrollDelta = lastTouchY - touchY;
-      setLastTouchY(touchY);
-    } else {
-      scrollDelta = event.deltaY;
-    }
-
-    const scrollDown = scrollDelta > 0;
+  const handleInteraction = (deltaY: number) => {
+    const scrollDelta = Math.abs(deltaY);
+    const scrollDown = deltaY > 0;
 
     if (scrollDown) {
       if (!isFullScale) {
-        event.preventDefault();  // Prevent scrolling when scaling up
-        let newScale = scale + scaleIncreaseRate * Math.abs(scrollDelta);
+        let newScale = scale + scaleIncreaseRate * scrollDelta;
         if (newScale >= scaleEnd) {
           newScale = scaleEnd;
-          setIsFullScale(true); // Enable natural page scrolling after full scale is reached
+          setScale(newScale);
+          setTimeout(() => {
+            setIsFullScale(true);
+          }, 500);
+        } else {
+          setScale(newScale);
         }
-        setScale(newScale);
       }
     } else {
-      if (scale > scaleStart && (window.scrollY === 0 || !isFullScale)) {
-        event.preventDefault();  // Prevent scrolling when scaling down
-        const newScale = Math.max(scaleStart, scale - scaleIncreaseRate * Math.abs(scrollDelta));
-        setScale(newScale);
-        if (newScale === scaleStart) {
-          setIsFullScale(false);  // Allow scaling up when scaled back to start
+      if (window.scrollY === 0) {
+        let newScale = scale - scaleIncreaseRate * scrollDelta;
+        if (newScale <= scaleStart) {
+          newScale = scaleStart;
+          setIsFullScale(false);
         }
+        setScale(newScale);
       }
     }
+  };
+
+  const handleScroll = (event: WheelEvent) => {
+    event.preventDefault();
+    handleInteraction(event.deltaY);
+  };
+
+  const handleTouchMove = (event: TouchEvent) => {
+    const touchY = event.touches[0].clientY;
+    const deltaY = touchY - (event.target as HTMLElement).getBoundingClientRect().top;
+    handleInteraction(deltaY);
   };
 
   useEffect(() => {
     window.addEventListener('wheel', handleScroll, { passive: false });
-    window.addEventListener('touchmove', handleScroll, { passive: false });
-    window.addEventListener('touchstart', handleTouchStart, { passive: false });
-
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
     return () => {
       window.removeEventListener('wheel', handleScroll);
-      window.removeEventListener('touchmove', handleScroll);
-      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
     };
   }, [scale, isFullScale]);
 
-  useEffect(() => {
-    // Update text color based on the scale
-    setTextColor(scale > 1.2 ? 'white' : '#32ABBC');
-  }, [scale]);
-
   const ellipsisStyle = {
     transform: `scale(${scale}) translateY(${translateYStart}px)`,
-    transition: 'transform 0.5s ease-out',
-    backgroundColor: '#32ABBC',
-    width: '32px',
-    height: '32px',
-    borderRadius: '50%', // Makes the div circular
-    position: 'absolute',
-    top: '33%', // Adjust this value as needed to center vertically
-    zIndex: 0
+    transition: 'transform 0.5s ease-out'
   };
+
+  useEffect(() => {
+    const coversText = scale > 1.2;
+    setTextColor(coversText ? 'white' : '#32ABBC');
+  }, [scale]);
 
   return (
     <>
       <section className="text-center w-full relative overflow-hidden flex items-center justify-center" style={{ background: '#D3E0E5', height: '503px' }}>
-        <div style={ellipsisStyle} />
+        <div style={ellipsisStyle} className="absolute top-1/3 w-32 h-32 bg-[#32ABBC] rounded-full z-0" />
         <div className="z-10 relative max-w-4xl mx-auto px-4">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold font-century-gothic-pro text-black">Välkommen till</h1>
           <div className="mt-2 text-lg md:text-xl lg:text-3xl font-bold font-century-gothic-pro text-black">en byrå fylld av passionerade,</div>
