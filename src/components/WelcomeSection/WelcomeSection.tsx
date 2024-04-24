@@ -5,11 +5,12 @@ const WelcomeSection: React.FC = () => {
   const scaleStart = 0.5;  // Startskala
   const scaleEnd = 2.5;    // Målskala
   const translateYStart = 0;  // Initial translateY position
-  const scaleIncreaseRate = 0.01;  // Skalningsökningstakt per pixel skrollad
+  const scaleIncreaseRate = 0.02;  // Ökad skalningshastighet per pixel skrollad eller vid pekrörelse
+  const touchTolerance = 10;  // Tolerans för touchrörelser
   const [scale, setScale] = useState<number>(scaleStart);
   const [isFullScale, setIsFullScale] = useState<boolean>(false);
   const [textColor, setTextColor] = useState<string>('#32ABBC');
-  const [lastTouchY, setLastTouchY] = useState<number | null>(null);  // Spårar den senaste Y-positionen vid touchstart
+  const [lastTouchY, setLastTouchY] = useState<number | null>(null);
 
   const handleInteraction = useCallback((deltaY: number) => {
     const scrollDelta = Math.abs(deltaY);
@@ -22,7 +23,7 @@ const WelcomeSection: React.FC = () => {
         if (newScale === scaleEnd) {
           setIsFullScale(true);
         }
-        return true;  // Prevent default to avoid scrolling the page
+        return true;  
       }
     } else {
       if (window.scrollY === 0 && scale > scaleStart) {
@@ -31,10 +32,10 @@ const WelcomeSection: React.FC = () => {
         if (newScale === scaleStart) {
           setIsFullScale(false);
         }
-        return true;  // Prevent default to avoid scrolling the page
+        return true;  
       }
     }
-    return false;  // Allow default behavior (page scrolling)
+    return false;  
   }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate]);
 
   const handleScroll = useCallback((event: WheelEvent) => {
@@ -51,12 +52,12 @@ const WelcomeSection: React.FC = () => {
     if (lastTouchY !== null) {
       const touchY = event.touches[0].clientY;
       const deltaY = lastTouchY - touchY;
-      if (handleInteraction(deltaY)) {
+      if (Math.abs(deltaY) > touchTolerance && handleInteraction(deltaY)) {
         event.preventDefault();
       }
       setLastTouchY(touchY);
     }
-  }, [lastTouchY, handleInteraction]);
+  }, [lastTouchY, handleInteraction, touchTolerance]);
 
   useEffect(() => {
     window.addEventListener('wheel', handleScroll, { passive: false });
