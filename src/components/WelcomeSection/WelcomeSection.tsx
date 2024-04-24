@@ -15,26 +15,26 @@ const WelcomeSection: React.FC = () => {
     const scrollDelta = Math.abs(deltaY);
     const scrollDown = deltaY > 0;
 
-    if (scrollDown && !isFullScale) {
-      // Ökar storleken på ellipsen om inte redan vid maxskala
-      const newScale = Math.min(scale + scaleIncreaseRate * scrollDelta, scaleEnd);
-      setScale(newScale);
-      if (newScale === scaleEnd) {
-        setIsFullScale(true);
+    if (scrollDown) {
+      if (!isFullScale) {
+        const newScale = Math.min(scale + scaleIncreaseRate * scrollDelta, scaleEnd);
+        setScale(newScale);
+        if (newScale === scaleEnd) {
+          setIsFullScale(true);
+        }
+        return true;  // Prevent default to avoid scrolling the page
       }
-      return true;  // Förhindrar standardskrollning
-    } else if (!scrollDown && window.scrollY === 0) {
-      // Minskar storleken på ellipsen endast när användaren är överst på sidan
-      if (scale > scaleStart) {
+    } else {
+      if (window.scrollY === 0 && scale > scaleStart) {
         const newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
         setScale(newScale);
         if (newScale === scaleStart) {
           setIsFullScale(false);
         }
-        return true;  // Förhindrar standardskrollning
+        return true;  // Prevent default to avoid scrolling the page
       }
     }
-    return false;  // Tillåter standardskrollning om inga andra villkor är uppfyllda
+    return false;  // Allow default behavior (page scrolling)
   }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate]);
 
   const handleScroll = useCallback((event: WheelEvent) => {
