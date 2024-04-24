@@ -2,73 +2,81 @@
 import React, { useEffect, useState, useCallback } from 'react';
 
 const WelcomeSection: React.FC = () => {
-  const scaleStart = 0.5; // Start scale
-  const scaleEnd = 2.5; // End scale
-  const translateYStart = 0; // Initial translateY position
-  const scaleIncreaseRate = 0.01; // Increased rate of scaling per pixel scrolled
+  const scaleStart = 0.5;
+  const scaleEnd = 2.5;
+  const translateYStart = 0;
+  const scaleIncreaseRate = 0.01;
   const [scale, setScale] = useState<number>(scaleStart);
-  const [isFullScale, setIsFullScale] = useState<boolean>(false); // Tracks if full scaling is achieved
-
-  const [textColor, setTextColor] = useState<string>('#32ABBC'); // State for text color
+  const [isFullScale, setIsFullScale] = useState<boolean>(false);
+  const [textColor, setTextColor] = useState<string>('#32ABBC');
+  const [lastTouchY, setLastTouchY] = useState<number | null>(null);  // Track the last Y position on touch start
 
   const handleInteraction = useCallback((deltaY: number) => {
+    const scrollDelta = Math.abs(deltaY);
     const scrollDown = deltaY > 0;
+
     if (scrollDown) {
       if (!isFullScale) {
-        let newScale = scale + scaleIncreaseRate * Math.abs(deltaY);
-        if (newScale >= scaleEnd) {
-          newScale = scaleEnd;
+        const newScale = Math.min(scale + scaleIncreaseRate * scrollDelta, scaleEnd);
+        setScale(newScale);
+        if (newScale === scaleEnd) {
           setIsFullScale(true);
         }
-        setScale(newScale);
-        return true; // Indicate that default behavior should be prevented
+        return true;  // Prevent default to avoid scrolling the page
       }
     } else {
-      if (window.scrollY === 0 && scale > scaleStart) {
-        let newScale = scale - scaleIncreaseRate * Math.abs(deltaY);
-        if (newScale <= scaleStart) {
-          newScale = scaleStart;
+      if (scale > scaleStart) {
+        const newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
+        setScale(newScale);
+        if (newScale === scaleStart) {
           setIsFullScale(false);
         }
-        setScale(newScale);
-        return true; // Indicate that default behavior should be prevented
+        return true;  // Prevent default to avoid scrolling the page
       }
     }
-    return false; // No need to prevent default behavior
+    return false;  // Allow default behavior (page scrolling)
   }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate]);
 
-  const throttle = (callback: (event: any) => void, limit: number) => {
-    let waiting = false;
-    return function(event: any) {
-      if (!waiting) {
-        const shouldPreventDefault:any = callback(event);
-        if (shouldPreventDefault) event.preventDefault();
-        waiting = true;
-        setTimeout(() => {
-          waiting = false;
-        }, limit);
-      }
-    };
-  };
+  const handleScroll = useCallback((event: WheelEvent) => {
+    if (handleInteraction(event.deltaY)) {
+      event.preventDefault();
+    }
+  }, [handleInteraction]);
 
-  const handleScroll = throttle((event: WheelEvent) => {
-    return handleInteraction(event.deltaY);
-  }, 100);
+  const handleTouchStart = useCallback((event: TouchEvent) => {
+    setLastTouchY(event.touches[0].clientY);
+  }, []);
+
+  const handleTouchMove = useCallback((event: TouchEvent) => {
+    if (lastTouchY !== null) {
+      const touchY = event.touches[0].clientY;
+      const deltaY = lastTouchY - touchY;
+      if (handleInteraction(deltaY)) {
+        event.preventDefault();
+      }
+      setLastTouchY(touchY);
+    }
+  }, [lastTouchY, handleInteraction]);
 
   useEffect(() => {
     window.addEventListener('wheel', handleScroll, { passive: false });
+    window.addEventListener('touchstart', handleTouchStart, { passive: false });
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+
     return () => {
       window.removeEventListener('wheel', handleScroll);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
     };
-  }, [handleScroll]);
+  }, [handleScroll, handleTouchStart, handleTouchMove]);
 
   const ellipsisStyle = {
     transform: `scale(${scale}) translateY(${translateYStart}px)`,
-    transition: 'transform 0.5s ease-out' // Smooth scaling transitions
+    transition: 'transform 0.5s ease-out'
   };
 
   useEffect(() => {
-    const coversText = scale > 1.2; // Adjust text color based on scale
+    const coversText = scale > 1.2;
     setTextColor(coversText ? 'white' : '#32ABBC');
   }, [scale]);
 
@@ -90,3 +98,4 @@ const WelcomeSection: React.FC = () => {
 };
 
 export default WelcomeSection;
+
