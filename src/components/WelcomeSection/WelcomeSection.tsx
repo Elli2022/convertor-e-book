@@ -27,7 +27,7 @@ const WelcomeSection: React.FC = () => {
         return true;  // Prevent default to avoid scrolling the page
       }
     } else {
-      if ((atTopOfPage && scale > scaleStart) || scale > scaleStart) {
+      if (atTopOfPage || scale > scaleStart) {
         const newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
         setScale(newScale);
         if (newScale === scaleStart) {
@@ -43,7 +43,7 @@ const WelcomeSection: React.FC = () => {
     if (!isFullScale && handleInteraction(event.deltaY)) {
       event.preventDefault();
     }
-  }, [handleInteraction, isFullScale]);
+  }, [handleInteraction]);
 
   const handleTouchStart = useCallback((event: TouchEvent) => {
     setLastTouchY(event.touches[0].clientY);
