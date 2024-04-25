@@ -2,37 +2,36 @@
 import React, { useEffect, useState, useCallback } from 'react';
 
 const WelcomeSection: React.FC = () => {
-  const scaleStart = 0.5; // Start scale
-  const scaleEnd = 2.5;   // End scale
-  const translateYStart = 0; // Start position for translateY
-  const scaleIncreaseRate = 0.01; // Rate of scaling per pixel scrolled
+  const scaleStart = 0.5;  // Startskala
+  const scaleEnd = 2.5;    // Målskala
+  const translateYStart = 0;  // Initial translateY position
+  const scaleIncreaseRate = 0.01;  // Skalningsökningstakt per pixel skrollad
   const [scale, setScale] = useState<number>(scaleStart);
   const [isFullScale, setIsFullScale] = useState<boolean>(false);
   const [textColor, setTextColor] = useState<string>('#32ABBC');
-  const [lastTouchY, setLastTouchY] = useState<number | null>(null);
+  const [lastTouchY, setLastTouchY] = useState<number | null>(null);  // Spårar den senaste Y-positionen vid touchstart
 
   const handleInteraction = useCallback((deltaY: number) => {
-    if (window.scrollY !== 0) return false;  // Ensure scaling only when at the top of the page
-
     const scrollDelta = Math.abs(deltaY);
     const scrollDown = deltaY > 0;
 
-    if (scrollDown && !isFullScale) {
-      const newScale = Math.min(scale + scaleIncreaseRate * scrollDelta, scaleEnd);
-      setScale(newScale);
-      if (newScale === scaleEnd) {
-        setIsFullScale(true);
+    // Ensure interactions only occur at the top of the page
+    if (window.scrollY !== 0) return false;
+
+    if (scrollDown) {
+      if (!isFullScale) {
+        const newScale = Math.min(scale + scaleIncreaseRate * scrollDelta, scaleEnd);
+        setScale(newScale);
+        return newScale === scaleEnd;  // Return true to prevent default if scaling occurred
       }
-      return true;
-    } else if (!scrollDown && scale > scaleStart) {
-      const newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
-      setScale(newScale);
-      if (newScale === scaleStart) {
-        setIsFullScale(false);
+    } else {
+      if (scale > scaleStart) {
+        const newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
+        setScale(newScale);
+        return newScale === scaleStart;  // Return true to prevent default if scaling occurred
       }
-      return true;
     }
-    return false;
+    return false;  // Allow default behavior (page scrolling)
   }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate]);
 
   const handleTouchMove = useCallback((event: TouchEvent) => {
@@ -51,7 +50,8 @@ const WelcomeSection: React.FC = () => {
       setLastTouchY(event.touches[0].clientY);
     };
 
-    window.addEventListener('touchstart', handleTouchStart);
+    // Add touch event listeners
+    window.addEventListener('touchstart', handleTouchStart, { passive: false });
     window.addEventListener('touchmove', handleTouchMove, { passive: false });
 
     return () => {
