@@ -17,30 +17,24 @@ const WelcomeSection: React.FC = () => {
     const scrollDelta = Math.abs(deltaY);
     const scrollDown = deltaY > 0;
 
-    if (scrollDown) {
-      if (!isFullScale) {
-        const newScale = Math.min(scale + scaleIncreaseRate * scrollDelta, scaleEnd);
-        setScale(newScale);
-        if (newScale === scaleEnd) {
-          setIsFullScale(true);
-        }
-        return true;  // Prevent default to avoid scrolling the page
-      }
-    } else {
-      if (atTopOfPage || scale > scaleStart) {
-        const newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
-        setScale(newScale);
-        if (newScale === scaleStart) {
-          setIsFullScale(false);
-        }
-        return true;  // Prevent default to avoid scrolling the page
-      }
+    if (scrollDown && isFullScale) {
+      return false; // Prevent scrolling down when elipsen is at full scale
     }
-    return false;  // Allow default behavior (page scrolling)
-  }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate, atTopOfPage]);
+
+    const newScale = Math.min(Math.max(scale + scaleIncreaseRate * deltaY, scaleStart), scaleEnd);
+    setScale(newScale);
+
+    if (newScale === scaleEnd) {
+      setIsFullScale(true);
+    } else if (newScale === scaleStart) {
+      setIsFullScale(false);
+    }
+
+    return true;
+  }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate]);
 
   const handleScroll = useCallback((event: WheelEvent) => {
-    if (!isFullScale && handleInteraction(event.deltaY)) {
+    if (!handleInteraction(event.deltaY)) {
       event.preventDefault();
     }
   }, [handleInteraction]);
@@ -50,10 +44,10 @@ const WelcomeSection: React.FC = () => {
   }, []);
 
   const handleTouchMove = useCallback((event: TouchEvent) => {
-    if (!isFullScale && lastTouchY !== null) {
+    if (lastTouchY !== null) {
       const touchY = event.touches[0].clientY;
       const deltaY = lastTouchY - touchY;
-      if (handleInteraction(deltaY)) {
+      if (!handleInteraction(deltaY)) {
         event.preventDefault();
       }
       setLastTouchY(touchY);
@@ -70,7 +64,6 @@ const WelcomeSection: React.FC = () => {
       window.removeEventListener('wheel', handleScroll);
       window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
-      window.removeEventListener('scroll', () => setAtTopOfPage(window.scrollY === 0));
     };
   }, [handleScroll, handleTouchStart, handleTouchMove]);
 
