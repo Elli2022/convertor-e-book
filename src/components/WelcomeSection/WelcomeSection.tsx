@@ -9,8 +9,8 @@ const WelcomeSection: React.FC = () => {
   const [scale, setScale] = useState<number>(scaleStart);
   const [isFullScale, setIsFullScale] = useState<boolean>(false);
   const [textColor, setTextColor] = useState<string>('#32ABBC');
-  const [lastTouchY, setLastTouchY] = useState<number | null>(null);
-  const [atTopOrBottomOfPage, setAtTopOrBottomOfPage] = useState<boolean>(true); // Track if user is at the top or bottom of the page
+  const [lastTouchY, setLastTouchY] = useState<number | null>(null);  // Track the last Y position on touch start
+  const [atTopOfPage, setAtTopOfPage] = useState<boolean>(true); // Track if user is at the top of the page
 
   const handleInteraction = useCallback((deltaY: number) => {
     const scrollDelta = Math.abs(deltaY);
@@ -23,20 +23,20 @@ const WelcomeSection: React.FC = () => {
         if (newScale === scaleEnd) {
           setIsFullScale(true);
         }
-        return true;
+        return true;  // Prevent default to avoid scrolling the page
       }
     } else {
-      if (atTopOrBottomOfPage || scale > scaleStart) {
+      if (atTopOfPage || scale > scaleStart) {
         const newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
         setScale(newScale);
         if (newScale === scaleStart) {
           setIsFullScale(false);
         }
-        return true;
+        return true;  // Prevent default to avoid scrolling the page
       }
     }
-    return false;
-  }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate, atTopOrBottomOfPage]);
+    return false;  // Allow default behavior (page scrolling)
+  }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate, atTopOfPage]);
 
   const handleScroll = useCallback((event: WheelEvent) => {
     if (handleInteraction(event.deltaY)) {
@@ -60,20 +60,16 @@ const WelcomeSection: React.FC = () => {
   }, [lastTouchY, handleInteraction]);
 
   useEffect(() => {
-    const updateAtTopOrBottomOfPage = () => {
-      setAtTopOrBottomOfPage(window.scrollY === 0 || window.innerHeight + window.scrollY >= document.body.scrollHeight);
-    };
-
     window.addEventListener('wheel', handleScroll, { passive: false });
     window.addEventListener('touchstart', handleTouchStart, { passive: false });
     window.addEventListener('touchmove', handleTouchMove, { passive: false });
-    window.addEventListener('scroll', updateAtTopOrBottomOfPage);
+    window.addEventListener('scroll', () => setAtTopOfPage(window.scrollY === 0));
 
     return () => {
       window.removeEventListener('wheel', handleScroll);
       window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
-      window.removeEventListener('scroll', updateAtTopOrBottomOfPage);
+      window.removeEventListener('scroll', () => setAtTopOfPage(window.scrollY === 0));
     };
   }, [handleScroll, handleTouchStart, handleTouchMove]);
 
