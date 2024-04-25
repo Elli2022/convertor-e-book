@@ -1,4 +1,5 @@
 "use client"
+"use client"
 import React, { useEffect, useState, useCallback } from 'react';
 
 const WelcomeSection: React.FC = () => {
@@ -9,48 +10,47 @@ const WelcomeSection: React.FC = () => {
   const [scale, setScale] = useState<number>(scaleStart);
   const [isFullScale, setIsFullScale] = useState<boolean>(false);
   const [textColor, setTextColor] = useState<string>('#32ABBC');
-  const [lastTouchY, setLastTouchY] = useState<number | null>(null);
-  const [atTopOfPage, setAtTopOfPage] = useState<boolean>(true);
+  const [lastTouchY, setLastTouchY] = useState<number | null>(null);  // Track the last Y position on touch start
+  const [atTopOfPage, setAtTopOfPage] = useState<boolean>(true); // Track if user is at the top of the page
 
   const handleInteraction = useCallback((deltaY: number) => {
-    if (!atTopOfPage) return false; // Ensure interactions only happen at the top of the page
-
     const scrollDelta = Math.abs(deltaY);
     const scrollDown = deltaY > 0;
 
     if (scrollDown) {
-      // Scale up the ellipse
-      const newScale = Math.min(scale + scaleIncreaseRate * scrollDelta, scaleEnd);
-      setScale(newScale);
-      if (newScale === scaleEnd) {
-        setIsFullScale(true);
+      if (!isFullScale) {
+        const newScale = Math.min(scale + scaleIncreaseRate * scrollDelta, scaleEnd);
+        setScale(newScale);
+        if (newScale === scaleEnd) {
+          setIsFullScale(true);
+        }
+        return true;  // Prevent default to avoid scrolling the page
       }
-      return true; // Prevent default to avoid scrolling the page
-      
-    } else if (!scrollDown && scale > scaleStart) {
-      // Scale down the ellipse
-      const newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
-      setScale(newScale);
-      if (newScale === scaleStart) {
-        setIsFullScale(false);
+    } else {
+      if ((atTopOfPage && scale > scaleStart) || scale > scaleStart) {
+        const newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
+        setScale(newScale);
+        if (newScale === scaleStart) {
+          setIsFullScale(false);
+        }
+        return true;  // Prevent default to avoid scrolling the page
       }
-      return true; // Prevent default to avoid scrolling the page
     }
-    return false; // Allow default behavior (page scrolling)
+    return false;  // Allow default behavior (page scrolling)
   }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate, atTopOfPage]);
 
   const handleScroll = useCallback((event: WheelEvent) => {
-    if (handleInteraction(event.deltaY)) {
+    if (!isFullScale && handleInteraction(event.deltaY)) {
       event.preventDefault();
     }
-  }, [handleInteraction]);
+  }, [handleInteraction, isFullScale]);
 
   const handleTouchStart = useCallback((event: TouchEvent) => {
     setLastTouchY(event.touches[0].clientY);
   }, []);
 
   const handleTouchMove = useCallback((event: TouchEvent) => {
-    if (lastTouchY !== null) {
+    if (!isFullScale && lastTouchY !== null) {
       const touchY = event.touches[0].clientY;
       const deltaY = lastTouchY - touchY;
       if (handleInteraction(deltaY)) {
@@ -58,7 +58,7 @@ const WelcomeSection: React.FC = () => {
       }
       setLastTouchY(touchY);
     }
-  }, [lastTouchY, handleInteraction]);
+  }, [lastTouchY, handleInteraction, isFullScale]);
 
   useEffect(() => {
     window.addEventListener('wheel', handleScroll, { passive: false });
