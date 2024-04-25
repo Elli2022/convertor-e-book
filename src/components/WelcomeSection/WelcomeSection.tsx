@@ -9,8 +9,8 @@ const WelcomeSection: React.FC = () => {
   const [scale, setScale] = useState<number>(scaleStart);
   const [isFullScale, setIsFullScale] = useState<boolean>(false);
   const [textColor, setTextColor] = useState<string>('#32ABBC');
-  const [lastTouchY, setLastTouchY] = useState<number | null>(null);  // Track the last Y position on touch start
-  const [atTopOfPage, setAtTopOfPage] = useState<boolean>(true); // Track if user is at the top of the page
+  const [lastTouchY, setLastTouchY] = useState<number | null>(null);
+  const [atTopOfPage, setAtTopOfPage] = useState<boolean>(true);
 
   const handleInteraction = useCallback((deltaY: number) => {
     const scrollDelta = Math.abs(deltaY);
@@ -23,7 +23,7 @@ const WelcomeSection: React.FC = () => {
         if (newScale === scaleEnd) {
           setIsFullScale(true);
         }
-        return true;  // Prevent default to avoid scrolling the page
+        return true;
       }
     } else {
       if ((atTopOfPage && scale > scaleStart) || scale > scaleStart) {
@@ -32,10 +32,10 @@ const WelcomeSection: React.FC = () => {
         if (newScale === scaleStart) {
           setIsFullScale(false);
         }
-        return true;  // Prevent default to avoid scrolling the page
+        return true;
       }
     }
-    return false;  // Allow default behavior (page scrolling)
+    return false;
   }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate, atTopOfPage]);
 
   const handleScroll = useCallback((event: WheelEvent) => {
