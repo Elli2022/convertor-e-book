@@ -2,10 +2,10 @@
 import React, { useEffect, useState, useCallback } from 'react';
 
 const WelcomeSection: React.FC = () => {
-  const scaleStart = 0.5;
-  const scaleEnd = 2.5;
-  const translateYStart = 0;
-  const scaleIncreaseRate = 0.005;  // Minska denna takt för finare kontroll
+  const scaleStart = 0.5;  // Start scale
+  const scaleEnd = 2.5;    // Max scale
+  const translateYStart = 0;  // Initial Y translate
+  const scaleIncreaseRate = 0.02;  // More sensitive scale change rate
   const [scale, setScale] = useState(scaleStart);
   const [isFullScale, setIsFullScale] = useState(false);
   const [textColor, setTextColor] = useState('#32ABBC');
@@ -15,7 +15,8 @@ const WelcomeSection: React.FC = () => {
     const scrollDelta = Math.abs(deltaY);
     const scrollDown = deltaY > 0;
 
-    if (window.scrollY !== 0) return false;  // Interagera endast när användaren är högst upp
+    // Interact only if at the top of the page
+    if (window.scrollY !== 0) return false;
 
     if (scrollDown && !isFullScale) {
       const newScale = Math.min(scale + scaleIncreaseRate * scrollDelta, scaleEnd);
@@ -33,12 +34,12 @@ const WelcomeSection: React.FC = () => {
     if (lastTouchY !== null) {
       const touchY = event.touches[0].clientY;
       const deltaY = lastTouchY - touchY;
-      if (Math.abs(deltaY) > 5) {  // Endast reagera på signifikanta rörelser
+      if (Math.abs(deltaY) > 1) {  // Sensitive to even small moves
         if (handleInteraction(deltaY)) {
           event.preventDefault();
         }
+        setLastTouchY(touchY);
       }
-      setLastTouchY(touchY);
     }
   }, [lastTouchY, handleInteraction]);
 
@@ -47,7 +48,7 @@ const WelcomeSection: React.FC = () => {
       setLastTouchY(event.touches[0].clientY);
     };
 
-    window.addEventListener('touchstart', handleTouchStart);
+    window.addEventListener('touchstart', handleTouchStart, { passive: false });
     window.addEventListener('touchmove', handleTouchMove, { passive: false });
 
     return () => {
