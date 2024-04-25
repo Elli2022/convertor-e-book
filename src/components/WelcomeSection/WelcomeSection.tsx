@@ -2,37 +2,44 @@
 import React, { useEffect, useState, useCallback } from 'react';
 
 const WelcomeSection: React.FC = () => {
-  const scaleStart = 0.5;  // Startskala
-  const scaleEnd = 2.5;    // Målskala
-  const translateYStart = 0;  // Initial translateY position
-  const scaleIncreaseRate = 0.01;  // Skalningsökningstakt per pixel skrollad
+  const scaleStart = 0.5;
+  const scaleEnd = 2.5;
+  const translateYStart = 0;
+  const scaleIncreaseRate = 0.01;
   const [scale, setScale] = useState<number>(scaleStart);
   const [isFullScale, setIsFullScale] = useState<boolean>(false);
   const [textColor, setTextColor] = useState<string>('#32ABBC');
-  const [lastTouchY, setLastTouchY] = useState<number | null>(null);  // Spårar den senaste Y-positionen vid touchstart
+  const [lastTouchY, setLastTouchY] = useState<number | null>(null);
+  const [touchActive, setTouchActive] = useState<boolean>(false);  // Håller koll på om touch interaktion pågår
 
   const handleInteraction = useCallback((deltaY: number) => {
     const scrollDelta = Math.abs(deltaY);
     const scrollDown = deltaY > 0;
 
-    // Ensure interactions only occur at the top of the page
-    if (window.scrollY !== 0) return false;
+    // Säkerställ att interaktioner endast sker vid toppen av sidan
+    if (!touchActive || window.scrollY !== 0) return false;
 
     if (scrollDown) {
       if (!isFullScale) {
         const newScale = Math.min(scale + scaleIncreaseRate * scrollDelta, scaleEnd);
         setScale(newScale);
-        return newScale === scaleEnd;  // Return true to prevent default if scaling occurred
+        if (newScale === scaleEnd) {
+          setIsFullScale(true);
+        }
+        return true;
       }
     } else {
       if (scale > scaleStart) {
         const newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
         setScale(newScale);
-        return newScale === scaleStart;  // Return true to prevent default if scaling occurred
+        if (newScale === scaleStart) {
+          setIsFullScale(false);
+        }
+        return true;
       }
     }
-    return false;  // Allow default behavior (page scrolling)
-  }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate]);
+    return false;
+  }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate, touchActive]);
 
   const handleTouchMove = useCallback((event: TouchEvent) => {
     if (lastTouchY !== null) {
@@ -48,15 +55,24 @@ const WelcomeSection: React.FC = () => {
   useEffect(() => {
     const handleTouchStart = (event: TouchEvent) => {
       setLastTouchY(event.touches[0].clientY);
+      setTouchActive(true);  // Aktiverar touch-kontroll
     };
 
-    // Add touch event listeners
-    window.addEventListener('touchstart', handleTouchStart, { passive: false });
+    const handleTouchEnd = () => {
+      setLastTouchY(null);
+      setTouchActive(false);  // Avslutar touch-kontroll när användaren släpper skärmen
+    };
+
+    window.addEventListener('touchstart', handleTouchStart);
     window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('touchend', handleTouchEnd);
+    window.addEventListener('touchcancel', handleTouchEnd);
 
     return () => {
       window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
+      window.removeEventListener('touchcancel', handleTouchEnd);
     };
   }, [handleTouchMove]);
 
@@ -71,19 +87,17 @@ const WelcomeSection: React.FC = () => {
   }, [scale]);
 
   return (
-    <>
-      <section className="text-center w-full relative overflow-hidden flex items-center justify-center" style={{ background: '#D3E0E5', height: '503px' }}>
-        <div style={ellipsisStyle} className="absolute top-1/3 w-32 h-32 bg-[#32ABBC] rounded-full z-0" />
-        <div className="z-10 relative max-w-4xl mx-auto px-4">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold font-century-gothic-pro text-black">Välkommen till</h1>
-          <div className="mt-2 text-lg md:text-xl lg:text-3xl font-bold font-century-gothic-pro text-black">en byrå fylld av passionerade,</div>
-          <div className={`text-lg md:text-xl lg:text-3xl font-bold font-century-gothic-pro`} style={{ color: textColor }}>
-            <span style={{ color: 'black' }}>prestigelösa och </span>
-            resultatdrivna doers.
-          </div>
+    <section className="text-center w-full relative overflow-hidden flex items-center justify-center" style={{ background: '#D3E0E5', height: '503px' }}>
+      <div style={ellipsisStyle} className="absolute top-1/3 w-32 h-32 bg-[#32ABBC] rounded-full z-0" />
+      <div className="z-10 relative max-w-4xl mx-auto px-4">
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold font-century-gothic-pro text-black">Välkommen till</h1>
+        <div className="mt-2 text-lg md:text-xl lg:text-3xl font-bold font-century-gothic-pro text-black">en byrå fylld av passionerade,</div>
+        <div className={`text-lg md:text-xl lg:text-3xl font-bold font-century-gothic-pro`} style={{ color: textColor }}>
+          <span style={{ color: 'black' }}>prestigelösa och </span>
+          resultatdrivna doers.
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 };
 
