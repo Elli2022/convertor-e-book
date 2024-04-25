@@ -10,9 +10,8 @@ const WelcomeSection: React.FC = () => {
   const [scale, setScale] = useState<number>(scaleStart);
   const [isFullScale, setIsFullScale] = useState<boolean>(false);
   const [textColor, setTextColor] = useState<string>('#32ABBC');
-  const [lastTouchY, setLastTouchY] = useState<number | null>(null);  
-  const [atTopOfPage, setAtTopOfPage] = useState<boolean>(true); 
-  const [welcomeSectionActive, setWelcomeSectionActive] = useState<boolean>(true); // Track if WelcomeSection is active
+  const [lastTouchY, setLastTouchY] = useState<number | null>(null);  // Track the last Y position on touch start
+  const [atTopOfPage, setAtTopOfPage] = useState<boolean>(true); // Track if user is at the top of the page
 
   const handleInteraction = useCallback((deltaY: number) => {
     const scrollDelta = Math.abs(deltaY);
@@ -25,20 +24,20 @@ const WelcomeSection: React.FC = () => {
         if (newScale === scaleEnd) {
           setIsFullScale(true);
         }
-        return true;
+        return true;  // Prevent default to avoid scrolling the page
       }
     } else {
-      if ((atTopOfPage || scale > scaleStart) && welcomeSectionActive) { // Check if at the top of the page and WelcomeSection is active before changing ellipsis size
+      if (atTopOfPage || scale > scaleStart) {
         const newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
         setScale(newScale);
         if (newScale === scaleStart) {
           setIsFullScale(false);
         }
-        return true;
+        return true;  // Prevent default to avoid scrolling the page
       }
     }
-    return false;
-  }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate, atTopOfPage, welcomeSectionActive]);
+    return false;  // Allow default behavior (page scrolling)
+  }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate, atTopOfPage]);
 
   const handleScroll = useCallback((event: WheelEvent) => {
     if (handleInteraction(event.deltaY)) {
@@ -51,7 +50,7 @@ const WelcomeSection: React.FC = () => {
   }, []);
 
   const handleTouchMove = useCallback((event: TouchEvent) => {
-    if (lastTouchY !== null && (atTopOfPage || scale > scaleStart) && welcomeSectionActive) { // Check if at the top of the page and WelcomeSection is active before changing ellipsis size
+    if (lastTouchY !== null) {
       const touchY = event.touches[0].clientY;
       const deltaY = lastTouchY - touchY;
       if (handleInteraction(deltaY)) {
@@ -59,7 +58,7 @@ const WelcomeSection: React.FC = () => {
       }
       setLastTouchY(touchY);
     }
-  }, [lastTouchY, handleInteraction, atTopOfPage, scale, scaleStart, welcomeSectionActive]);
+  }, [lastTouchY, handleInteraction]);
 
   useEffect(() => {
     window.addEventListener('wheel', handleScroll, { passive: false });
@@ -85,22 +84,9 @@ const WelcomeSection: React.FC = () => {
     setTextColor(coversText ? 'white' : '#32ABBC');
   }, [scale]);
 
-  useEffect(() => {
-    const welcomeSection = document.getElementById('welcome-section');
-    const handleVisibilityChange = () => {
-      if (welcomeSection) {
-        setWelcomeSectionActive(document.visibilityState === 'visible' && welcomeSection.getBoundingClientRect().top >= 0);
-      }
-    };
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-    };
-  }, []);
-
   return (
     <>
-      <section id="welcome-section" className="text-center w-full relative overflow-hidden flex items-center justify-center" style={{ background: '#D3E0E5', height: '503px' }}>
+      <section className="text-center w-full relative overflow-hidden flex items-center justify-center" style={{ background: '#D3E0E5', height: '503px' }}>
         <div style={ellipsisStyle} className="absolute top-1/3 w-32 h-32 bg-[#32ABBC] rounded-full z-0" />
         <div className="z-10 relative max-w-4xl mx-auto px-4">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold font-century-gothic-pro text-black">Välkommen till</h1>
