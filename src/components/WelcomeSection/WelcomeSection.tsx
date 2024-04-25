@@ -2,38 +2,40 @@
 import React, { useEffect, useState, useCallback } from 'react';
 
 const WelcomeSection: React.FC = () => {
-  const scaleStart = 0.5; // Start scale
-  const scaleEnd = 2.5;   // End scale
-  const translateYStart = 0; // Initial translateY position
-  const scaleIncreaseRate = 0.005; // More sensitive scale change rate
-  const [scale, setScale] = useState<number>(scaleStart);
-  const [isFullScale, setIsFullScale] = useState<boolean>(false);
-  const [textColor, setTextColor] = useState<string>('#32ABBC');
+  const scaleStart = 0.5;  // Start scale
+  const scaleEnd = 2.5;    // Max scale
+  const translateYStart = 0;  // Start position for translateY
+  const scaleIncreaseRate = 0.01;  // How much to scale per pixel of touch move
+  const touchScaleThreshold = 2;  // Threshold for touch move sensitivity
+  const [scale, setScale] = useState(scaleStart);
+  const [isFullScale, setIsFullScale] = useState(false);
+  const [textColor, setTextColor] = useState('#32ABBC');
   const [lastTouchY, setLastTouchY] = useState<number | null>(null);
 
-  const handleInteraction = useCallback((deltaY: number, touchEnd: boolean) => {
+  const handleInteraction = useCallback((deltaY: number) => {
+    if (window.scrollY !== 0) return false; // Interact only at the top of the page
+
     const scrollDelta = Math.abs(deltaY);
+    if (scrollDelta < touchScaleThreshold) return false;  // Ignore small moves
+
     const scrollDown = deltaY > 0;
-
-    if (window.scrollY !== 0 && !touchEnd) return false; // Only interact if at the top unless finishing touch
-
-    if ((scrollDown && !isFullScale) || (!scrollDown && scale > scaleStart)) {
-      const newScale = scrollDown ? Math.min(scale + scaleIncreaseRate * scrollDelta, scaleEnd) :
-                                    Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
+    if (scrollDown && !isFullScale) {
+      const newScale = Math.min(scale + scaleIncreaseRate * scrollDelta, scaleEnd);
       setScale(newScale);
-      if (newScale === scaleEnd || newScale === scaleStart) {
-        setIsFullScale(newScale === scaleEnd);
-      }
-      return true;
+      return newScale === scaleEnd;
+    } else if (!scrollDown && scale > scaleStart) {
+      const newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
+      setScale(newScale);
+      return newScale === scaleStart;
     }
     return false;
-  }, [scale, scaleStart, scaleEnd, scaleIncreaseRate, isFullScale]);
+  }, [scale, scaleStart, scaleEnd, scaleIncreaseRate, isFullScale, touchScaleThreshold]);
 
   const handleTouchMove = useCallback((event: TouchEvent) => {
     if (lastTouchY !== null) {
       const touchY = event.touches[0].clientY;
       const deltaY = lastTouchY - touchY;
-      if (handleInteraction(deltaY, false)) {
+      if (handleInteraction(deltaY)) {
         event.preventDefault();
       }
       setLastTouchY(touchY);
@@ -45,23 +47,12 @@ const WelcomeSection: React.FC = () => {
       setLastTouchY(event.touches[0].clientY);
     };
 
-    const handleTouchEnd = () => {
-      if (lastTouchY !== null) {
-        handleInteraction(0, true); // Assume small adjustment on end
-        setLastTouchY(null);
-      }
-    };
-
     window.addEventListener('touchstart', handleTouchStart, { passive: false });
     window.addEventListener('touchmove', handleTouchMove, { passive: false });
-    window.addEventListener('touchend', handleTouchEnd);
-    window.addEventListener('touchcancel', handleTouchEnd);
 
     return () => {
       window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
-      window.removeEventListener('touchend', handleTouchEnd);
-      window.removeEventListener('touchcancel', handleTouchEnd);
     };
   }, [handleTouchMove]);
 
