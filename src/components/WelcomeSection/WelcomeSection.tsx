@@ -58,7 +58,7 @@ const WelcomeSection: React.FC = () => {
       }
       setLastTouchY(touchY);
     }
-  }, [lastTouchY, handleInteraction, isFullScale]);
+  }, [lastTouchY, handleInteraction]);
 
   useEffect(() => {
     window.addEventListener('wheel', handleScroll, { passive: false });
