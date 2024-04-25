@@ -9,8 +9,8 @@ const WelcomeSection: React.FC = () => {
   const [scale, setScale] = useState<number>(scaleStart);
   const [isFullScale, setIsFullScale] = useState<boolean>(false);
   const [textColor, setTextColor] = useState<string>('#32ABBC');
-  const [lastTouchY, setLastTouchY] = useState<number | null>(null);
-  const [canScrollDown, setCanScrollDown] = useState<boolean>(false);  // Spårar om sidan kan skrollas ner
+  const [lastTouchY, setLastTouchY] = useState<number | null>(null);  // Track the last Y position on touch start
+  const [atTopOfPage, setAtTopOfPage] = useState<boolean>(true); // Track if user is at the top of the page
 
   const handleInteraction = useCallback((deltaY: number) => {
     const scrollDelta = Math.abs(deltaY);
@@ -22,44 +22,56 @@ const WelcomeSection: React.FC = () => {
         setScale(newScale);
         if (newScale === scaleEnd) {
           setIsFullScale(true);
-          setCanScrollDown(true);  // Tillåt sidskrollning när full skala uppnås
         }
         return true;  // Prevent default to avoid scrolling the page
       }
     } else {
-      if (scale > scaleStart && window.scrollY === 0) {
+      if (atTopOfPage || scale > scaleStart) {
         const newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
         setScale(newScale);
         if (newScale === scaleStart) {
           setIsFullScale(false);
-          setCanScrollDown(false);  // Förhindra sidskrollning när ellipsen minskas till startstorlek
         }
         return true;  // Prevent default to avoid scrolling the page
       }
     }
     return false;  // Allow default behavior (page scrolling)
-  }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate]);
+  }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate, atTopOfPage]);
+
+  const handleScroll = useCallback((event: WheelEvent) => {
+    if (handleInteraction(event.deltaY)) {
+      event.preventDefault();
+    }
+  }, [handleInteraction]);
+
+  const handleTouchStart = useCallback((event: TouchEvent) => {
+    setLastTouchY(event.touches[0].clientY);
+  }, []);
 
   const handleTouchMove = useCallback((event: TouchEvent) => {
     if (lastTouchY !== null) {
       const touchY = event.touches[0].clientY;
       const deltaY = lastTouchY - touchY;
-      if (handleInteraction(deltaY) || !canScrollDown) {
+      if (handleInteraction(deltaY)) {
         event.preventDefault();
       }
       setLastTouchY(touchY);
     }
-  }, [lastTouchY, handleInteraction, canScrollDown]);
+  }, [lastTouchY, handleInteraction]);
 
   useEffect(() => {
-    window.addEventListener('touchstart', (event) => setLastTouchY(event.touches[0].clientY), { passive: false });
+    window.addEventListener('wheel', handleScroll, { passive: false });
+    window.addEventListener('touchstart', handleTouchStart, { passive: false });
     window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('scroll', () => setAtTopOfPage(window.scrollY === 0));
 
     return () => {
-      window.removeEventListener('touchstart', (event) => setLastTouchY(event.touches[0].clientY));
+      window.removeEventListener('wheel', handleScroll);
+      window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('scroll', () => setAtTopOfPage(window.scrollY === 0));
     };
-  }, [handleTouchMove]);
+  }, [handleScroll, handleTouchStart, handleTouchMove]);
 
   const ellipsisStyle = {
     transform: `scale(${scale}) translateY(${translateYStart}px)`,
@@ -72,10 +84,11 @@ const WelcomeSection: React.FC = () => {
   }, [scale]);
 
   return (
-    <section className="text-center w-full relative overflow-hidden flex items-center justify-center" style={{ background: '#D3E0E5', height: '503px' }}>
-      <div style={ellipsisStyle} className="absolute top-1/3 w-32 h-32 bg-[#32ABBC] rounded-full z-0" />
-      <div className="z-10 relative max-w-4xl mx-auto px-4">
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold font-century-gothic-pro text-black">Välkommen till</h1>
+    <>
+      <section className="text-center w-full relative overflow-hidden flex items-center justify-center" style={{ background: '#D3E0E5', height: '503px' }}>
+        <div style={ellipsisStyle} className="absolute top-1/3 w-32 h-32 bg-[#32ABBC] rounded-full z-0" />
+        <div className="z-10 relative max-w-4xl mx-auto px-4">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold font-century-gothic-pro text-black">Välkommen till</h1>
           <div className="mt-2 text-lg md:text-xl lg:text-3xl font-bold font-century-gothic-pro text-black">en byrå fylld av passionerade,</div>
           <div className={`text-lg md:text-xl lg:text-3xl font-bold font-century-gothic-pro`} style={{ color: textColor }}>
             <span style={{ color: 'black' }}>prestigelösa och </span>
@@ -83,7 +96,7 @@ const WelcomeSection: React.FC = () => {
           </div>
         </div>
       </section>
-    
+    </>
   );
 };
 
