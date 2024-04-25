@@ -17,7 +17,7 @@ const WelcomeSection: React.FC = () => {
     const scrollDown = deltaY > 0;
 
     if (scrollDown) {
-      if (scale < scaleEnd) {
+      if (!isFullScale) {
         const newScale = Math.min(scale + scaleIncreaseRate * scrollDelta, scaleEnd);
         setScale(newScale);
         if (newScale === scaleEnd) {
@@ -26,7 +26,7 @@ const WelcomeSection: React.FC = () => {
         return true;
       }
     } else {
-      if (atTopOfPage && scale > scaleStart) {
+      if ((atTopOfPage && scale > scaleStart) || scale > scaleStart) {
         const newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
         setScale(newScale);
         if (newScale === scaleStart) {
@@ -39,17 +39,17 @@ const WelcomeSection: React.FC = () => {
   }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate, atTopOfPage]);
 
   const handleScroll = useCallback((event: WheelEvent) => {
-    if (handleInteraction(event.deltaY)) {
+    if (!isFullScale && handleInteraction(event.deltaY)) {
       event.preventDefault();
     }
-  }, [handleInteraction]);
+  }, [handleInteraction, isFullScale]);
 
   const handleTouchStart = useCallback((event: TouchEvent) => {
     setLastTouchY(event.touches[0].clientY);
   }, []);
 
   const handleTouchMove = useCallback((event: TouchEvent) => {
-    if (lastTouchY !== null) {
+    if (!isFullScale && lastTouchY !== null) {
       const touchY = event.touches[0].clientY;
       const deltaY = lastTouchY - touchY;
       if (handleInteraction(deltaY)) {
@@ -57,7 +57,7 @@ const WelcomeSection: React.FC = () => {
       }
       setLastTouchY(touchY);
     }
-  }, [lastTouchY, handleInteraction]);
+  }, [lastTouchY, handleInteraction, isFullScale]);
 
   useEffect(() => {
     window.addEventListener('wheel', handleScroll, { passive: false });
