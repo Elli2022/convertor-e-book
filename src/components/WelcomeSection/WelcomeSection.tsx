@@ -13,27 +13,30 @@ const WelcomeSection: React.FC = () => {
   const [atTopOfPage, setAtTopOfPage] = useState<boolean>(true);
 
   const handleInteraction = useCallback((deltaY: number) => {
-    if (!atTopOfPage) return false; // Ensure no interaction unless at the very top
+    if (!atTopOfPage) return false; // Ensure interactions only happen at the top of the page
 
     const scrollDelta = Math.abs(deltaY);
     const scrollDown = deltaY > 0;
 
-    if (scrollDown && scale < scaleEnd) {
+    if (scrollDown) {
+      // Scale up the ellipse
       const newScale = Math.min(scale + scaleIncreaseRate * scrollDelta, scaleEnd);
       setScale(newScale);
       if (newScale === scaleEnd) {
         setIsFullScale(true);
       }
-      return true;  // Prevent any scrolling while scaling
+      return true; // Prevent default to avoid scrolling the page
+      
     } else if (!scrollDown && scale > scaleStart) {
+      // Scale down the ellipse
       const newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
       setScale(newScale);
       if (newScale === scaleStart) {
         setIsFullScale(false);
       }
-      return true;  // Prevent any scrolling while scaling
+      return true; // Prevent default to avoid scrolling the page
     }
-    return false;  // Allow page to scroll if not scaling
+    return false; // Allow default behavior (page scrolling)
   }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate, atTopOfPage]);
 
   const handleScroll = useCallback((event: WheelEvent) => {
