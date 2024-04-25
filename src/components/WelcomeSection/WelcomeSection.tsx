@@ -27,7 +27,7 @@ const WelcomeSection: React.FC = () => {
         return true;  // Prevent default to avoid scrolling the page
       }
     } else {
-      if (atTopOfPage || scale > scaleStart) {
+      if ((atTopOfPage && scale > scaleStart) || scale > scaleStart) {
         const newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
         setScale(newScale);
         if (newScale === scaleStart) {
