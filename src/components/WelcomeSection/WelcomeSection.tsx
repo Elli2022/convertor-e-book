@@ -1,57 +1,50 @@
 "use client"
 import React, { useEffect, useState, useCallback } from 'react';
 
-interface WelcomeSectionProps {}
-
-const WelcomeSection: React.FC<WelcomeSectionProps> = () => {
-  const scaleStart: number = 0.5;
-  const scaleEnd: number = 2.5;
-  const translateYStart: number = 0;
-  const scaleIncreaseRate: number = 0.01;
+const WelcomeSection: React.FC = () => {
+  const scaleStart = 0.5;
+  const scaleEnd = 2.5;
+  const translateYStart = 0;
+  const scaleIncreaseRate = 0.01;
   const [scale, setScale] = useState<number>(scaleStart);
   const [isFullScale, setIsFullScale] = useState<boolean>(false);
+  const [atTopOfPage, setAtTopOfPage] = useState<boolean>(true);  // Spårar om användaren är överst på sidan
   const [textColor, setTextColor] = useState<string>('#32ABBC');
-  const [lastTouchY, setLastTouchY] = useState<number | null>(null);  // Track the last Y position on touch start
+  const [lastTouchY, setLastTouchY] = useState<number | null>(null);
 
-  const handleInteraction = useCallback((deltaY: number): boolean => {
-    if (Math.abs(window.scrollY) > 0) return false; // Ensure interaction only when at the top of the page
+  const checkIfAtTop = () => {
+    setAtTopOfPage(window.scrollY === 0);
+  };
+
+  const handleInteraction = useCallback((deltaY: number) => {
+    if (!atTopOfPage) return false; // Interagera endast när användaren är överst på sidan
 
     const scrollDelta = Math.abs(deltaY);
     const scrollDown = deltaY > 0;
 
-    if (scrollDown) {
-      if (!isFullScale) {
-        const newScale = Math.min(scale + scaleIncreaseRate * scrollDelta, scaleEnd);
-        setScale(newScale);
-        if (newScale === scaleEnd) {
-          setIsFullScale(true);
-        }
-        return true;  // Prevent default to avoid scrolling the page
-      }
-    } else {
-      if (scale > scaleStart) {
-        const newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
-        setScale(newScale);
-        if (newScale === scaleStart) {
-          setIsFullScale(false);
-        }
-        return true;  // Prevent default to avoid scrolling the page
-      }
+    if (scrollDown && !isFullScale) {
+      const newScale = Math.min(scale + scaleIncreaseRate * scrollDelta, scaleEnd);
+      setScale(newScale);
+      return newScale === scaleEnd;
+    } else if (!scrollDown && scale > scaleStart) {
+      const newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
+      setScale(newScale);
+      return newScale === scaleStart;
     }
-    return false;  // Allow default behavior (page scrolling)
-  }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate]);
+    return false;
+  }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate, atTopOfPage]);
 
-  const handleScroll = useCallback((event: WheelEvent): void => {
+  const handleScroll = useCallback((event: WheelEvent) => {
     if (handleInteraction(event.deltaY)) {
       event.preventDefault();
     }
   }, [handleInteraction]);
 
-  const handleTouchStart = useCallback((event: TouchEvent): void => {
+  const handleTouchStart = useCallback((event: TouchEvent) => {
     setLastTouchY(event.touches[0].clientY);
   }, []);
 
-  const handleTouchMove = useCallback((event: TouchEvent): void => {
+  const handleTouchMove = useCallback((event: TouchEvent) => {
     if (lastTouchY !== null) {
       const touchY = event.touches[0].clientY;
       const deltaY = lastTouchY - touchY;
@@ -63,16 +56,18 @@ const WelcomeSection: React.FC<WelcomeSectionProps> = () => {
   }, [lastTouchY, handleInteraction]);
 
   useEffect(() => {
+    window.addEventListener('scroll', checkIfAtTop);
     window.addEventListener('wheel', handleScroll, { passive: false });
     window.addEventListener('touchstart', handleTouchStart, { passive: false });
     window.addEventListener('touchmove', handleTouchMove, { passive: false });
 
     return () => {
+      window.removeEventListener('scroll', checkIfAtTop);
       window.removeEventListener('wheel', handleScroll);
       window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
     };
-  }, [handleScroll, handleTouchStart, handleTouchMove]);
+  }, [handleScroll, handleTouchStart, handleTouchMove, checkIfAtTop]);
 
   const ellipsisStyle = {
     transform: `scale(${scale}) translateY(${translateYStart}px)`,
