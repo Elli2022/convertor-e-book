@@ -64,15 +64,29 @@ const WelcomeSection: React.FC = () => {
     window.addEventListener('wheel', handleScroll, { passive: false });
     window.addEventListener('touchstart', handleTouchStart, { passive: false });
     window.addEventListener('touchmove', handleTouchMove, { passive: false });
-    window.addEventListener('scroll', () => setAtTopOfPage(window.scrollY === 0));
+    window.addEventListener('scroll', () => {
+      const atTop = window.scrollY === 0;
+      setAtTopOfPage(atTop);
+      if (atTop && scale < scaleStart) {
+        setScale(scaleStart);
+        setIsFullScale(false);
+      }
+    });
 
     return () => {
       window.removeEventListener('wheel', handleScroll);
       window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
-      window.removeEventListener('scroll', () => setAtTopOfPage(window.scrollY === 0));
+      window.removeEventListener('scroll', () => {
+        const atTop = window.scrollY === 0;
+        setAtTopOfPage(atTop);
+        if (atTop && scale < scaleStart) {
+          setScale(scaleStart);
+          setIsFullScale(false);
+        }
+      });
     };
-  }, [handleScroll, handleTouchStart, handleTouchMove]);
+  }, [handleScroll, handleTouchStart, handleTouchMove, scale, scaleStart]);
 
   const ellipsisStyle = {
     transform: `scale(${scale}) translateY(${translateYStart}px)`,
