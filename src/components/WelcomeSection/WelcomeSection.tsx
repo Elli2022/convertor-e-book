@@ -9,8 +9,8 @@ const WelcomeSection: React.FC = () => {
   const [scale, setScale] = useState<number>(scaleStart);
   const [isFullScale, setIsFullScale] = useState<boolean>(false);
   const [textColor, setTextColor] = useState<string>('#32ABBC');
-  const [lastTouchY, setLastTouchY] = useState<number | null>(null);
-  const [atTopOfPage, setAtTopOfPage] = useState<boolean>(true);
+  const [lastTouchY, setLastTouchY] = useState<number | null>(null);  // Track the last Y position on touch start
+  const [atTopOfPage, setAtTopOfPage] = useState<boolean>(true); // Track if user is at the top of the page
 
   const handleInteraction = useCallback((deltaY: number) => {
     const scrollDelta = Math.abs(deltaY);
@@ -23,7 +23,7 @@ const WelcomeSection: React.FC = () => {
         if (newScale === scaleEnd) {
           setIsFullScale(true);
         }
-        return true;
+        return true;  // Prevent default to avoid scrolling the page
       }
     } else {
       if (atTopOfPage || scale > scaleStart) {
@@ -32,10 +32,10 @@ const WelcomeSection: React.FC = () => {
         if (newScale === scaleStart) {
           setIsFullScale(false);
         }
-        return true;
+        return true;  // Prevent default to avoid scrolling the page
       }
     }
-    return false;
+    return false;  // Allow default behavior (page scrolling)
   }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate, atTopOfPage]);
 
   const handleScroll = useCallback((event: WheelEvent) => {
@@ -60,20 +60,16 @@ const WelcomeSection: React.FC = () => {
   }, [lastTouchY, handleInteraction]);
 
   useEffect(() => {
-    const updateAtTopOfPage = () => {
-      setAtTopOfPage(window.scrollY === 0);
-    };
-
     window.addEventListener('wheel', handleScroll, { passive: false });
     window.addEventListener('touchstart', handleTouchStart, { passive: false });
     window.addEventListener('touchmove', handleTouchMove, { passive: false });
-    window.addEventListener('scroll', updateAtTopOfPage);
+    window.addEventListener('scroll', () => setAtTopOfPage(window.scrollY === 0));
 
     return () => {
       window.removeEventListener('wheel', handleScroll);
       window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
-      window.removeEventListener('scroll', updateAtTopOfPage);
+      window.removeEventListener('scroll', () => setAtTopOfPage(window.scrollY === 0));
     };
   }, [handleScroll, handleTouchStart, handleTouchMove]);
 
@@ -88,17 +84,19 @@ const WelcomeSection: React.FC = () => {
   }, [scale]);
 
   return (
-    <section className="text-center w-full relative overflow-hidden flex items-center justify-center" style={{ background: '#D3E0E5', height: '503px' }}>
-      <div style={ellipsisStyle} className="absolute top-1/3 w-32 h-32 bg-[#32ABBC] rounded-full z-0" />
-      <div className="z-10 relative max-w-4xl mx-auto px-4">
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold font-century-gothic-pro text-black">Välkommen till</h1>
-        <div className="mt-2 text-lg md:text-xl lg:text-3xl font-bold font-century-gothic-pro text-black">en byrå fylld av passionerade,</div>
-        <div className={`text-lg md:text-xl lg:text-3xl font-bold font-century-gothic-pro`} style={{ color: textColor }}>
-          <span style={{ color: 'black' }}>prestigelösa och </span>
-          resultatdrivna doers.
+    <>
+      <section className="text-center w-full relative overflow-hidden flex items-center justify-center" style={{ background: '#D3E0E5', height: '503px' }}>
+        <div style={ellipsisStyle} className="absolute top-1/3 w-32 h-32 bg-[#32ABBC] rounded-full z-0" />
+        <div className="z-10 relative max-w-4xl mx-auto px-4">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold font-century-gothic-pro text-black">Välkommen till</h1>
+          <div className="mt-2 text-lg md:text-xl lg:text-3xl font-bold font-century-gothic-pro text-black">en byrå fylld av passionerade,</div>
+          <div className={`text-lg md:text-xl lg:text-3xl font-bold font-century-gothic-pro`} style={{ color: textColor }}>
+            <span style={{ color: 'black' }}>prestigelösa och </span>
+            resultatdrivna doers.
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 
