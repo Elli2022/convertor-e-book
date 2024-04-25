@@ -26,7 +26,7 @@ const WelcomeSection: React.FC = () => {
         return true;
       }
     } else {
-      if (scale > scaleStart) {
+      if (atTopOfPage && scale > scaleStart) {
         const newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
         setScale(newScale);
         if (newScale === scaleStart) {
@@ -36,7 +36,7 @@ const WelcomeSection: React.FC = () => {
       }
     }
     return false;
-  }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate]);
+  }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate, atTopOfPage]);
 
   const handleScroll = useCallback((event: WheelEvent) => {
     if (handleInteraction(event.deltaY)) {
