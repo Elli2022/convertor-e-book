@@ -5,48 +5,38 @@ const WelcomeSection: React.FC = () => {
   const scaleStart = 0.5;
   const scaleEnd = 2.5;
   const translateYStart = 0;
-  const scaleIncreaseRate = 0.01;
-  const [scale, setScale] = useState<number>(scaleStart);
-  const [isFullScale, setIsFullScale] = useState<boolean>(false);
-  const [textColor, setTextColor] = useState<string>('#32ABBC');
+  const scaleIncreaseRate = 0.005;  // Minska denna takt för finare kontroll
+  const [scale, setScale] = useState(scaleStart);
+  const [isFullScale, setIsFullScale] = useState(false);
+  const [textColor, setTextColor] = useState('#32ABBC');
   const [lastTouchY, setLastTouchY] = useState<number | null>(null);
-  const [touchActive, setTouchActive] = useState<boolean>(false);  // Håller koll på om touch interaktion pågår
 
   const handleInteraction = useCallback((deltaY: number) => {
     const scrollDelta = Math.abs(deltaY);
     const scrollDown = deltaY > 0;
 
-    // Säkerställ att interaktioner endast sker vid toppen av sidan
-    if (!touchActive || window.scrollY !== 0) return false;
+    if (window.scrollY !== 0) return false;  // Interagera endast när användaren är högst upp
 
-    if (scrollDown) {
-      if (!isFullScale) {
-        const newScale = Math.min(scale + scaleIncreaseRate * scrollDelta, scaleEnd);
-        setScale(newScale);
-        if (newScale === scaleEnd) {
-          setIsFullScale(true);
-        }
-        return true;
-      }
-    } else {
-      if (scale > scaleStart) {
-        const newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
-        setScale(newScale);
-        if (newScale === scaleStart) {
-          setIsFullScale(false);
-        }
-        return true;
-      }
+    if (scrollDown && !isFullScale) {
+      const newScale = Math.min(scale + scaleIncreaseRate * scrollDelta, scaleEnd);
+      setScale(newScale);
+      return true;
+    } else if (!scrollDown && scale > scaleStart) {
+      const newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
+      setScale(newScale);
+      return true;
     }
     return false;
-  }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate, touchActive]);
+  }, [scale, scaleStart, scaleEnd, scaleIncreaseRate, isFullScale]);
 
   const handleTouchMove = useCallback((event: TouchEvent) => {
     if (lastTouchY !== null) {
       const touchY = event.touches[0].clientY;
       const deltaY = lastTouchY - touchY;
-      if (handleInteraction(deltaY)) {
-        event.preventDefault();
+      if (Math.abs(deltaY) > 5) {  // Endast reagera på signifikanta rörelser
+        if (handleInteraction(deltaY)) {
+          event.preventDefault();
+        }
       }
       setLastTouchY(touchY);
     }
@@ -55,24 +45,14 @@ const WelcomeSection: React.FC = () => {
   useEffect(() => {
     const handleTouchStart = (event: TouchEvent) => {
       setLastTouchY(event.touches[0].clientY);
-      setTouchActive(true);  // Aktiverar touch-kontroll
-    };
-
-    const handleTouchEnd = () => {
-      setLastTouchY(null);
-      setTouchActive(false);  // Avslutar touch-kontroll när användaren släpper skärmen
     };
 
     window.addEventListener('touchstart', handleTouchStart);
     window.addEventListener('touchmove', handleTouchMove, { passive: false });
-    window.addEventListener('touchend', handleTouchEnd);
-    window.addEventListener('touchcancel', handleTouchEnd);
 
     return () => {
       window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
-      window.removeEventListener('touchend', handleTouchEnd);
-      window.removeEventListener('touchcancel', handleTouchEnd);
     };
   }, [handleTouchMove]);
 
