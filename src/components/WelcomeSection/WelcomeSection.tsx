@@ -57,8 +57,8 @@ const WelcomeSection: React.FC = () => {
   }, [handleInteraction, updateAtTopOfPage]);
 
   useEffect(() => {
-    const handleTouchMove = (event: TouchEvent) => {
-      if (lastTouchY !== null && atTopOfPage) {
+    const handleTouchMove = useCallback((event: TouchEvent) => {
+      if (lastTouchY !== null) {
         const touchY = event.touches[0].clientY;
         const deltaY = lastTouchY - touchY;
         if (handleInteraction(deltaY)) {
@@ -66,8 +66,8 @@ const WelcomeSection: React.FC = () => {
         }
         setLastTouchY(touchY);
       }
-    };
-
+    }, [lastTouchY, handleInteraction]);
+    
     window.addEventListener('touchstart', (event: TouchEvent) => {
       setLastTouchY(event.touches[0].clientY);
     }, { passive: false });
