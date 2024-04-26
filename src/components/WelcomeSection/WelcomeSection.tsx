@@ -13,6 +13,8 @@ const WelcomeSection: React.FC = () => {
   const [atTopOfPage, setAtTopOfPage] = useState<boolean>(true);
 
   const handleInteraction = useCallback((deltaY: number) => {
+    if (!atTopOfPage) return false; // Only interact with scaling if at the top of the page
+
     const scrollDelta = Math.abs(deltaY);
     const scrollDown = deltaY > 0;
 
@@ -32,7 +34,7 @@ const WelcomeSection: React.FC = () => {
       return true; // Prevent default to avoid scrolling the page
     }
     return false; // Allow default behavior (page scrolling)
-  }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate]);
+  }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate, atTopOfPage]);
 
   const handleScroll = useCallback((event: WheelEvent) => {
     if (handleInteraction(event.deltaY)) {
