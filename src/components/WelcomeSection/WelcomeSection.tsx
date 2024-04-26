@@ -1,5 +1,4 @@
 "use client"
-"use client"
 import React, { useEffect, useState, useCallback } from 'react';
 
 const WelcomeSection: React.FC = () => {
@@ -14,42 +13,30 @@ const WelcomeSection: React.FC = () => {
   const [atTopOfPage, setAtTopOfPage] = useState<boolean>(true); // Track if user is at the top of the page
 
   const handleInteraction = useCallback((deltaY: number) => {
-    if (!atTopOfPage) return false; // Only interact if at the top of the page.
-  
     const scrollDelta = Math.abs(deltaY);
     const scrollDown = deltaY > 0;
-  
-    // Handling scaling up
+
     if (scrollDown) {
-      if (scale < scaleEnd) { // Can scale up if not yet at maximum scale
+      if (!isFullScale) {
         const newScale = Math.min(scale + scaleIncreaseRate * scrollDelta, scaleEnd);
-        if (newScale > scale) { // Apply new scale if it increases
-          setScale(newScale);
-          if (newScale === scaleEnd) {
-            setIsFullScale(true);
-          }
-          return true; // Prevent default to stop scrolling while scaling
+        setScale(newScale);
+        if (newScale === scaleEnd) {
+          setIsFullScale(true);
         }
+        return true;  // Prevent default to avoid scrolling the page
       }
-    } 
-    // Handling scaling down
-    else {
-      if (scale > scaleStart) { // Can scale down if not yet at minimum scale
+    } else {
+      if ((atTopOfPage && scale > scaleStart) || scale > scaleStart) {
         const newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
-        if (newScale < scale) { // Apply new scale if it decreases
-          setScale(newScale);
-          if (newScale === scaleStart) {
-            setIsFullScale(false);
-          }
-          return true; // Prevent default to stop scrolling while scaling
+        setScale(newScale);
+        if (newScale === scaleStart) {
+          setIsFullScale(false);
         }
+        return true;  // Prevent default to avoid scrolling the page
       }
     }
-    // Allow scrolling if no scaling change is applicable
-    return false; 
+    return false;  // Allow default behavior (page scrolling)
   }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate, atTopOfPage]);
-  
-  
 
   const handleScroll = useCallback((event: WheelEvent) => {
     if (!isFullScale && handleInteraction(event.deltaY)) {
