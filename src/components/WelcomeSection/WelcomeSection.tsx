@@ -9,23 +9,24 @@ const WelcomeSection: React.FC = () => {
   const [scale, setScale] = useState<number>(scaleStart);
   const [isFullScale, setIsFullScale] = useState<boolean>(false);
   const [textColor, setTextColor] = useState<string>('#32ABBC');
-  const [lastTouchY, setLastTouchY] = useState<number | null>(null);
-  const [atTopOfPage, setAtTopOfPage] = useState<boolean>(true);
+  const [lastTouchY, setLastTouchY] = useState<number | null>(null);  // Track the last Y position on touch start
+  const [atTopOfPage, setAtTopOfPage] = useState<boolean>(true); // Track if user is at the top of the page
 
-  // Handle scale interaction based on touch or scroll input
   const handleInteraction = useCallback((deltaY: number) => {
     const scrollDelta = Math.abs(deltaY);
     const scrollDown = deltaY > 0;
 
-    if (atTopOfPage) {
-      if (scrollDown && scale < scaleEnd) {
+    if (scrollDown) {
+      if (!isFullScale) {
         const newScale = Math.min(scale + scaleIncreaseRate * scrollDelta, scaleEnd);
         setScale(newScale);
         if (newScale === scaleEnd) {
           setIsFullScale(true);
         }
         return true;  // Prevent default to avoid scrolling the page
-      } else if (!scrollDown && scale > scaleStart) {
+      }
+    } else {
+      if (atTopOfPage || scale > scaleStart) {
         const newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
         setScale(newScale);
         if (newScale === scaleStart) {
@@ -59,20 +60,16 @@ const WelcomeSection: React.FC = () => {
   }, [lastTouchY, handleInteraction]);
 
   useEffect(() => {
-    const handleScrollPosition = () => {
-      setAtTopOfPage(window.scrollY === 0);
-    };
-
-    window.addEventListener('scroll', handleScrollPosition);
     window.addEventListener('wheel', handleScroll, { passive: false });
     window.addEventListener('touchstart', handleTouchStart, { passive: false });
     window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('scroll', () => setAtTopOfPage(window.scrollY === 0));
 
     return () => {
-      window.removeEventListener('scroll', handleScrollPosition);
       window.removeEventListener('wheel', handleScroll);
       window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('scroll', () => setAtTopOfPage(window.scrollY === 0));
     };
   }, [handleScroll, handleTouchStart, handleTouchMove]);
 
@@ -81,7 +78,6 @@ const WelcomeSection: React.FC = () => {
     transition: 'transform 0.5s ease-out'
   };
 
-  //change text color 
   useEffect(() => {
     const coversText = scale > 1.2;
     setTextColor(coversText ? 'white' : '#32ABBC');
