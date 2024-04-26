@@ -83,7 +83,7 @@ const WelcomeSection: React.FC = () => {
     transform: `scale(${scale}) translateY(${translateYStart}px)`,
     transition: 'transform 0.5s ease-out'
   };
-
+ // change text color
   useEffect(() => {
     setTextColor(scale > 1.2 ? 'white' : '#32ABBC');
   }, [scale]);
