@@ -6,6 +6,7 @@ const WelcomeSection: React.FC = () => {
   const scaleEnd = 2.5;
   const translateYStart = 0;
   const scaleIncreaseRate = 0.01;
+  const touchSensitivity = 5; // Increase if too sensitive, decrease if not sensitive enough
   const [scale, setScale] = useState<number>(scaleStart);
   const [isFullScale, setIsFullScale] = useState<boolean>(false);
   const [textColor, setTextColor] = useState<string>('#32ABBC');
@@ -13,8 +14,6 @@ const WelcomeSection: React.FC = () => {
   const [atTopOfPage, setAtTopOfPage] = useState<boolean>(true);
 
   const handleInteraction = useCallback((deltaY: number) => {
-    if (!atTopOfPage) return false; // Only interact with scaling if at the top of the page
-
     const scrollDelta = Math.abs(deltaY);
     const scrollDown = deltaY > 0;
 
@@ -24,17 +23,17 @@ const WelcomeSection: React.FC = () => {
       if (newScale === scaleEnd) {
         setIsFullScale(true);
       }
-      return true; // Prevent default to avoid scrolling the page
+      return true;
     } else if (!scrollDown && scale > scaleStart) {
       const newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
       setScale(newScale);
       if (newScale === scaleStart) {
         setIsFullScale(false);
       }
-      return true; // Prevent default to avoid scrolling the page
+      return true;
     }
-    return false; // Allow default behavior (page scrolling)
-  }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate, atTopOfPage]);
+    return false;
+  }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate]);
 
   const handleScroll = useCallback((event: WheelEvent) => {
     if (handleInteraction(event.deltaY)) {
@@ -50,12 +49,14 @@ const WelcomeSection: React.FC = () => {
     if (lastTouchY !== null && atTopOfPage) {
       const touchY = event.touches[0].clientY;
       const deltaY = lastTouchY - touchY;
-      if (handleInteraction(deltaY)) {
-        event.preventDefault();
+      if (Math.abs(deltaY) > touchSensitivity) {
+        if (handleInteraction(deltaY)) {
+          event.preventDefault();
+        }
+        setLastTouchY(touchY);
       }
-      setLastTouchY(touchY);
     }
-  }, [lastTouchY, handleInteraction, atTopOfPage]);
+  }, [lastTouchY, handleInteraction, atTopOfPage, touchSensitivity]);
 
   useEffect(() => {
     const handleScrollPosition = () => {
