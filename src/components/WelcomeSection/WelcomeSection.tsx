@@ -12,29 +12,30 @@ const WelcomeSection: React.FC = () => {
   const [lastTouchY, setLastTouchY] = useState<number | null>(null);
   const [atTopOfPage, setAtTopOfPage] = useState<boolean>(true);
 
+  // Handle scale interaction based on touch or scroll input
   const handleInteraction = useCallback((deltaY: number) => {
-    if (!atTopOfPage) return false;
-
     const scrollDelta = Math.abs(deltaY);
     const scrollDown = deltaY > 0;
 
-    if (scrollDown && scale < scaleEnd) {
-      const newScale = Math.min(scale + scaleIncreaseRate * scrollDelta, scaleEnd);
-      setScale(newScale);
-      if (newScale === scaleEnd) {
-        setIsFullScale(true);
+    if (atTopOfPage) {
+      if (scrollDown && scale < scaleEnd) {
+        const newScale = Math.min(scale + scaleIncreaseRate * scrollDelta, scaleEnd);
+        setScale(newScale);
+        if (newScale === scaleEnd) {
+          setIsFullScale(true);
+        }
+        return true;  // Prevent default to avoid scrolling the page
+      } else if (!scrollDown && scale > scaleStart) {
+        const newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
+        setScale(newScale);
+        if (newScale === scaleStart) {
+          setIsFullScale(false);
+        }
+        return true;  // Prevent default to avoid scrolling the page
       }
-      return true;
-    } else if (!scrollDown && scale > scaleStart) {
-      const newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
-      setScale(newScale);
-      if (newScale === scaleStart) {
-        setIsFullScale(false);
-      }
-      return true;
     }
-    return false;
-  }, [scale, scaleStart, scaleEnd, scaleIncreaseRate, atTopOfPage]);
+    return false;  // Allow default behavior (page scrolling)
+  }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate, atTopOfPage]);
 
   const handleScroll = useCallback((event: WheelEvent) => {
     if (handleInteraction(event.deltaY)) {
@@ -47,7 +48,7 @@ const WelcomeSection: React.FC = () => {
   }, []);
 
   const handleTouchMove = useCallback((event: TouchEvent) => {
-    if (lastTouchY !== null && atTopOfPage) {
+    if (lastTouchY !== null) {
       const touchY = event.touches[0].clientY;
       const deltaY = lastTouchY - touchY;
       if (handleInteraction(deltaY)) {
@@ -55,7 +56,7 @@ const WelcomeSection: React.FC = () => {
       }
       setLastTouchY(touchY);
     }
-  }, [lastTouchY, handleInteraction, atTopOfPage]);
+  }, [lastTouchY, handleInteraction]);
 
   useEffect(() => {
     const handleScrollPosition = () => {
