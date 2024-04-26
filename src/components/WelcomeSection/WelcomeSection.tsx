@@ -12,8 +12,12 @@ const WelcomeSection: React.FC = () => {
   const [lastTouchY, setLastTouchY] = useState<number | null>(null);
   const [atTopOfPage, setAtTopOfPage] = useState<boolean>(true);
 
+  const updateAtTopOfPage = useCallback(() => {
+    setAtTopOfPage(window.scrollY === 0);
+  }, []);
+
   const handleInteraction = useCallback((deltaY: number) => {
-    if (!atTopOfPage) return false;
+    if (!atTopOfPage) return false;  // Only interact if at the top of the page
 
     const scrollDelta = Math.abs(deltaY);
     const scrollDown = deltaY > 0;
@@ -34,46 +38,46 @@ const WelcomeSection: React.FC = () => {
       return true;
     }
     return false;
-  }, [scale, scaleStart, scaleEnd, scaleIncreaseRate, atTopOfPage]);
-
-  const handleScroll = useCallback((event: WheelEvent) => {
-    if (handleInteraction(event.deltaY)) {
-      event.preventDefault();
-    }
-  }, [handleInteraction]);
-
-  const handleTouchStart = useCallback((event: TouchEvent) => {
-    setLastTouchY(event.touches[0].clientY);
-  }, []);
-
-  const handleTouchMove = useCallback((event: TouchEvent) => {
-    if (lastTouchY !== null) {
-      const touchY = event.touches[0].clientY;
-      const deltaY = lastTouchY - touchY;
-      if (atTopOfPage && handleInteraction(deltaY)) {
-        event.preventDefault();
-      }
-      setLastTouchY(touchY);
-    }
-  }, [lastTouchY, handleInteraction, atTopOfPage]);
+  }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate, atTopOfPage]);
 
   useEffect(() => {
-    const handleScrollPosition = () => {
-      setAtTopOfPage(window.scrollY === 0);
+    const handleScroll = (event: WheelEvent) => {
+      if (handleInteraction(event.deltaY)) {
+        event.preventDefault();
+      }
     };
 
-    window.addEventListener('scroll', handleScrollPosition);
+    window.addEventListener('scroll', updateAtTopOfPage);
     window.addEventListener('wheel', handleScroll, { passive: false });
-    window.addEventListener('touchstart', handleTouchStart, { passive: false });
+
+    return () => {
+      window.removeEventListener('scroll', updateAtTopOfPage);
+      window.removeEventListener('wheel', handleScroll);
+    };
+  }, [handleInteraction, updateAtTopOfPage]);
+
+  useEffect(() => {
+    const handleTouchMove = (event: TouchEvent) => {
+      if (lastTouchY !== null && atTopOfPage) {
+        const touchY = event.touches[0].clientY;
+        const deltaY = lastTouchY - touchY;
+        if (handleInteraction(deltaY)) {
+          event.preventDefault();
+        }
+        setLastTouchY(touchY);
+      }
+    };
+
+    window.addEventListener('touchstart', (event: TouchEvent) => {
+      setLastTouchY(event.touches[0].clientY);
+    }, { passive: false });
+    
     window.addEventListener('touchmove', handleTouchMove, { passive: false });
 
     return () => {
-      window.removeEventListener('scroll', handleScrollPosition);
-      window.removeEventListener('wheel', handleScroll);
-      window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
     };
-  }, [handleScroll, handleTouchStart, handleTouchMove]);
+  }, [lastTouchY, handleInteraction, atTopOfPage]);
 
   const ellipsisStyle = {
     transform: `scale(${scale}) translateY(${translateYStart}px)`,
@@ -81,8 +85,7 @@ const WelcomeSection: React.FC = () => {
   };
 
   useEffect(() => {
-    const coversText = scale > 1.2;
-    setTextColor(coversText ? 'white' : '#32ABBC');
+    setTextColor(scale > 1.2 ? 'white' : '#32ABBC');
   }, [scale]);
 
   return (
@@ -103,3 +106,4 @@ const WelcomeSection: React.FC = () => {
 };
 
 export default WelcomeSection;
+
