@@ -6,73 +6,70 @@ const WelcomeSection: React.FC = () => {
   const scaleEnd = 2.5;
   const translateYStart = 0;
   const scaleIncreaseRate = 0.01;
-  const touchSensitivity = 5; // Increase if too sensitive, decrease if not sensitive enough
   const [scale, setScale] = useState<number>(scaleStart);
   const [isFullScale, setIsFullScale] = useState<boolean>(false);
   const [textColor, setTextColor] = useState<string>('#32ABBC');
-  const [lastTouchY, setLastTouchY] = useState<number | null>(null);
-  const [atTopOfPage, setAtTopOfPage] = useState<boolean>(true);
+  const [lastTouchY, setLastTouchY] = useState<number | null>(null);  // Track the last Y position on touch start
+  const [atTopOfPage, setAtTopOfPage] = useState<boolean>(true); // Track if user is at the top of the page
 
   const handleInteraction = useCallback((deltaY: number) => {
     const scrollDelta = Math.abs(deltaY);
     const scrollDown = deltaY > 0;
 
-    if (scrollDown && scale < scaleEnd) {
-      const newScale = Math.min(scale + scaleIncreaseRate * scrollDelta, scaleEnd);
-      setScale(newScale);
-      if (newScale === scaleEnd) {
-        setIsFullScale(true);
+    if (scrollDown) {
+      if (!isFullScale) {
+        const newScale = Math.min(scale + scaleIncreaseRate * scrollDelta, scaleEnd);
+        setScale(newScale);
+        if (newScale === scaleEnd) {
+          setIsFullScale(true);
+        }
+        return true;  // Prevent default to avoid scrolling the page
       }
-      return true;
-    } else if (!scrollDown && scale > scaleStart) {
-      const newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
-      setScale(newScale);
-      if (newScale === scaleStart) {
-        setIsFullScale(false);
+    } else {
+      if ((atTopOfPage && scale > scaleStart) || scale > scaleStart) {
+        const newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
+        setScale(newScale);
+        if (newScale === scaleStart) {
+          setIsFullScale(false);
+        }
+        return true;  // Prevent default to avoid scrolling the page
       }
-      return true;
     }
-    return false;
-  }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate]);
+    return false;  // Allow default behavior (page scrolling)
+  }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate, atTopOfPage]);
 
   const handleScroll = useCallback((event: WheelEvent) => {
-    if (handleInteraction(event.deltaY)) {
+    if (!isFullScale && handleInteraction(event.deltaY)) {
       event.preventDefault();
     }
-  }, [handleInteraction]);
+  }, [handleInteraction, isFullScale]);
 
   const handleTouchStart = useCallback((event: TouchEvent) => {
     setLastTouchY(event.touches[0].clientY);
   }, []);
 
   const handleTouchMove = useCallback((event: TouchEvent) => {
-    if (lastTouchY !== null && atTopOfPage) {
+    if (!isFullScale && lastTouchY !== null) {
       const touchY = event.touches[0].clientY;
       const deltaY = lastTouchY - touchY;
-      if (Math.abs(deltaY) > touchSensitivity) {
-        if (handleInteraction(deltaY)) {
-          event.preventDefault();
-        }
-        setLastTouchY(touchY);
+      if (handleInteraction(deltaY)) {
+        event.preventDefault();
       }
+      setLastTouchY(touchY);
     }
-  }, [lastTouchY, handleInteraction, atTopOfPage, touchSensitivity]);
+  }, [lastTouchY, handleInteraction, isFullScale]);
 
   useEffect(() => {
-    const handleScrollPosition = () => {
-      setAtTopOfPage(window.scrollY === 0);
-    };
-
-    window.addEventListener('scroll', handleScrollPosition);
     window.addEventListener('wheel', handleScroll, { passive: false });
     window.addEventListener('touchstart', handleTouchStart, { passive: false });
     window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('scroll', () => setAtTopOfPage(window.scrollY === 0));
 
     return () => {
-      window.removeEventListener('scroll', handleScrollPosition);
       window.removeEventListener('wheel', handleScroll);
       window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('scroll', () => setAtTopOfPage(window.scrollY === 0));
     };
   }, [handleScroll, handleTouchStart, handleTouchMove]);
 
@@ -104,3 +101,4 @@ const WelcomeSection: React.FC = () => {
 };
 
 export default WelcomeSection;
+
