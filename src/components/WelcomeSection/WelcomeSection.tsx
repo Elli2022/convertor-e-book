@@ -81,6 +81,7 @@ const WelcomeSection: React.FC = () => {
     transition: 'transform 0.5s ease-out'
   };
 
+  //change text color 
   useEffect(() => {
     const coversText = scale > 1.2;
     setTextColor(coversText ? 'white' : '#32ABBC');
