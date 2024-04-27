@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState, useCallback } from 'react';
 
-
+//test
 const WelcomeSection: React.FC = () => {
   const scaleStart = 0.5;
   const scaleEnd = 2.5;
