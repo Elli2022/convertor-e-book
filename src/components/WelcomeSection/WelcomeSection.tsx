@@ -1,61 +1,56 @@
 "use client"
 import React, { useEffect, useState, useCallback } from 'react';
 
-//test
-const WelcomeSection: React.FC = () => {
-  const scaleStart = 0.5;
-  const scaleEnd = 2.5;
-  const translateYStart = 0;
-  const scaleIncreaseRate = 0.01;
-  const [scale, setScale] = useState<number>(scaleStart);
-  const [isFullScale, setIsFullScale] = useState<boolean>(false);
-  const [textColor, setTextColor] = useState<string>('#32ABBC');
-  const [lastTouchY, setLastTouchY] = useState<number | null>(null);
+const WelcomeSection = () => {
+  const scaleStart = 0.5; // Start scale
+  const scaleEnd = 2.5; // End scale
+  const translateYStart = 0; // Initial translateY position
+  const scaleIncreaseRate = 0.01; // Increased rate of scaling per pixel scrolled
+  const [scale, setScale] = useState(scaleStart);
+  const [isFullScale, setIsFullScale] = useState(false); // Tracks if full scaling is achieved
+  const [lastTouchY, setLastTouchY] = useState<number | null>(null); // Last touch Y position for touch events
+  const [textColor, setTextColor] = useState('#32ABBC'); // State for text color
 
-  const handleInteraction = useCallback((deltaY: number) => {
-    const scrollDelta = Math.abs(deltaY);
+  const handleInteraction = useCallback((deltaY: number, isTouch: boolean = false) => {
+    const scrollDelta = Math.abs(deltaY) * (isTouch ? 1 : 50); // Normalize wheel delta, amplify for touch for consistent behavior
     const scrollDown = deltaY > 0;
 
     if (scrollDown) {
       if (!isFullScale) {
-        const newScale = Math.min(scale + scaleIncreaseRate * scrollDelta, scaleEnd);
+        let newScale = Math.min(scale + scaleIncreaseRate * scrollDelta, scaleEnd);
         setScale(newScale);
-        if (newScale === scaleEnd) {
+        if (newScale >= scaleEnd) {
           setIsFullScale(true);
+          setTimeout(() => { setIsFullScale(false); }, 500); // Allow natural scrolling after a delay when full scale is reached
         }
-        return true;
       }
     } else {
-      if (window.scrollY === 0 && scale > scaleStart) {
-        const newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
+      if (window.scrollY === 0) {
+        let newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
         setScale(newScale);
-        if (newScale === scaleStart) {
-          setIsFullScale(false);
+        if (newScale <= scaleStart) {
+          setIsFullScale(false); // Re-enable scaling up when scaled back to start
         }
-        return true;
       }
     }
-    return false;
   }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate]);
 
-  const handleScroll = useCallback((event: WheelEvent) => {
-    if (isFullScale && handleInteraction(event.deltaY)) {
-      event.preventDefault();
-    }
-  }, [handleInteraction, isFullScale]);
+  const handleScroll = useCallback((event:any) => {
+    handleInteraction(event.deltaY);
+    event.preventDefault(); // Prevent default scroll behavior during active scaling
+  }, [handleInteraction]);
 
-  const handleTouchStart = useCallback((event: TouchEvent) => {
+  const handleTouchStart = useCallback((event:any) => {
     setLastTouchY(event.touches[0].clientY);
   }, []);
 
-  const handleTouchMove = useCallback((event: TouchEvent) => {
+  const handleTouchMove = useCallback((event:any) => {
     if (lastTouchY !== null) {
       const touchY = event.touches[0].clientY;
       const deltaY = lastTouchY - touchY;
-      if (handleInteraction(deltaY)) {
-        event.preventDefault();
-      }
+      handleInteraction(deltaY, true);
       setLastTouchY(touchY);
+      event.preventDefault(); // Prevent default scroll behavior during touch move
     }
   }, [lastTouchY, handleInteraction]);
 
@@ -71,15 +66,15 @@ const WelcomeSection: React.FC = () => {
     };
   }, [handleScroll, handleTouchStart, handleTouchMove]);
 
-  const ellipsisStyle = {
-    transform: `scale(${scale}) translateY(${translateYStart}px)`,
-    transition: 'transform 0.5s ease-out'
-  };
-
   useEffect(() => {
     const coversText = scale > 1.2;
     setTextColor(coversText ? 'white' : '#32ABBC');
   }, [scale]);
+
+  const ellipsisStyle = {
+    transform: `scale(${scale}) translateY(${translateYStart}px)`,
+    transition: 'transform 0.5s ease-out'
+  };
 
   return (
     <>
@@ -99,4 +94,3 @@ const WelcomeSection: React.FC = () => {
 };
 
 export default WelcomeSection;
-
