@@ -2,17 +2,17 @@
 import React, { useEffect, useState, useCallback } from 'react';
 
 const WelcomeSection: React.FC = () => {
-  const scaleStart: number = 0.5; // Start scale
-  const scaleEnd: number = 2.5; // End scale
-  const translateYStart: number = 0; // Initial translateY position
-  const scaleIncreaseRate: number = 0.01; // Increased rate of scaling per pixel scrolled
+  const scaleStart: number = 0.5;
+  const scaleEnd: number = 2.5;
+  const translateYStart: number = 0;
+  const scaleIncreaseRate: number = 0.01;
   const [scale, setScale] = useState<number>(scaleStart);
-  const [isFullScale, setIsFullScale] = useState<boolean>(false); // Tracks if full scaling is achieved
-  const [lastTouchY, setLastTouchY] = useState<number | null>(null); // Last touch Y position for touch events
-  const [textColor, setTextColor] = useState<string>('#32ABBC'); // State for text color
+  const [isFullScale, setIsFullScale] = useState<boolean>(false);
+  const [lastTouchY, setLastTouchY] = useState<number | null>(null);
+  const [textColor, setTextColor] = useState<string>('#32ABBC');
 
   const handleInteraction = useCallback((deltaY: number, isTouch: boolean = false): boolean => {
-    const scrollDelta: number = Math.abs(deltaY) * (isTouch ? 1 : 50); // Normalize wheel delta, amplify for touch for consistent behavior
+    const scrollDelta: number = Math.abs(deltaY) * (isTouch ? 2 : 50); // Adjust the multiplier for touch sensitivity
     const scrollDown: boolean = deltaY > 0;
 
     let newScale: number = scale;
@@ -28,14 +28,11 @@ const WelcomeSection: React.FC = () => {
       }
     }
 
-    // Return true only if the scale has actually changed
     return newScale !== scale;
   }, [scale, scaleStart, scaleEnd, scaleIncreaseRate]);
 
   const handleScroll = useCallback((event: WheelEvent): void => {
-    if (handleInteraction(event.deltaY)) {
-      event.preventDefault(); // Prevent default only if scaling occurs
-    }
+    handleInteraction(event.deltaY);
   }, [handleInteraction]);
 
   const handleTouchStart = useCallback((event: TouchEvent): void => {
@@ -47,7 +44,7 @@ const WelcomeSection: React.FC = () => {
       const touchY: number = event.touches[0].clientY;
       const deltaY: number = lastTouchY - touchY;
       if (handleInteraction(deltaY, true)) {
-        event.preventDefault(); // Prevent default only if scaling occurs
+        event.preventDefault(); // Only prevent default if interaction changes scale
       }
       setLastTouchY(touchY);
     }
