@@ -11,8 +11,8 @@ const WelcomeSection: React.FC = () => {
   const [lastTouchY, setLastTouchY] = useState<number | null>(null);
   const [textColor, setTextColor] = useState<string>('#32ABBC');
 
-  const handleInteraction = useCallback((deltaY: number, isTouch: boolean = false): boolean => {
-    const scrollDelta: number = Math.abs(deltaY) * (isTouch ? 2 : 50); // Adjust the multiplier for touch sensitivity
+  const handleInteraction = useCallback((deltaY: number, isTouch: boolean = false): void => {
+    const scrollDelta: number = Math.abs(deltaY) * (isTouch ? 2 : 50);
     const scrollDown: boolean = deltaY > 0;
 
     let newScale: number = scale;
@@ -20,20 +20,30 @@ const WelcomeSection: React.FC = () => {
       if (scale < scaleEnd) {
         newScale = Math.min(scale + scaleIncreaseRate * scrollDelta, scaleEnd);
         setScale(newScale);
+        if (newScale >= scaleEnd) {
+          // Introduce a shorter delay before allowing natural scrolling
+          setTimeout(() => {
+            setIsFullScale(true);
+          }, 500); // Delay in milliseconds, adjust as needed
+        }
       }
     } else {
       if (window.scrollY === 0 && scale > scaleStart) {
         newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
         setScale(newScale);
+        if (newScale <= scaleStart) {
+          setIsFullScale(false);
+        }
       }
     }
-
-    return newScale !== scale;
   }, [scale, scaleStart, scaleEnd, scaleIncreaseRate]);
 
   const handleScroll = useCallback((event: WheelEvent): void => {
     handleInteraction(event.deltaY);
-  }, [handleInteraction]);
+    if (!isFullScale) {
+      event.preventDefault(); // Only prevent default if isFullScale is not true
+    }
+  }, [handleInteraction, isFullScale]);
 
   const handleTouchStart = useCallback((event: TouchEvent): void => {
     setLastTouchY(event.touches[0].clientY);
@@ -43,12 +53,13 @@ const WelcomeSection: React.FC = () => {
     if (lastTouchY !== null) {
       const touchY: number = event.touches[0].clientY;
       const deltaY: number = lastTouchY - touchY;
-      if (handleInteraction(deltaY, true)) {
-        event.preventDefault(); // Only prevent default if interaction changes scale
+      handleInteraction(deltaY, true);
+      if (!isFullScale) {
+        event.preventDefault(); // Only prevent default if isFullScale is not true
       }
       setLastTouchY(touchY);
     }
-  }, [lastTouchY, handleInteraction]);
+  }, [lastTouchY, handleInteraction, isFullScale]);
 
   useEffect(() => {
     window.addEventListener('wheel', handleScroll, { passive: false });
