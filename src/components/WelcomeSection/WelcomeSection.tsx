@@ -3,7 +3,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 
 const WelcomeSection: React.FC = () => {
   const scaleStart: number = 0.5;
-  const scaleEnd: number = 3.5;
+  const scaleEnd: number = 2.5;
   const translateYStart: number = 0;
   const scaleIncreaseRate: number = 0.01;
   const [scale, setScale] = useState<number>(scaleStart);
