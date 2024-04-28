@@ -3,7 +3,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 
 const WelcomeSection: React.FC = () => {
   const scaleStart: number = 0.5;
-  const scaleEnd: number = 2.5;
+  const scaleEnd: number = 3.5;
   const translateYStart: number = 0;
   const scaleIncreaseRate: number = 0.01;
   const [scale, setScale] = useState<number>(scaleStart);
@@ -88,7 +88,7 @@ const WelcomeSection: React.FC = () => {
       <section className="text-center w-full relative overflow-hidden flex items-center justify-center" style={{ background: '#D3E0E5', height: '503px' }}>
         <div style={ellipsisStyle} className="absolute top-1/3 w-32 h-32 bg-[#32ABBC] rounded-full z-0" />
         <div className="z-10 relative max-w-4xl mx-auto px-4">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold font-century-gothic-pro text-black">Välkommen till</h1>
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold font-century-gothic-pro text-black">Välkommen till <br /> Convertor</h1>
           <div className="mt-2 text-lg md:text-xl lg:text-3xl font-bold font-century-gothic-pro text-black">en byrå fylld av passionerade,</div>
           <div className={`text-lg md:text-xl lg:text-3xl font-bold font-century-gothic-pro`} style={{ color: textColor }}>
             <span style={{ color: 'black' }}>prestigelösa och </span>
