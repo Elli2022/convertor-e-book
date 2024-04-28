@@ -1,56 +1,55 @@
 "use client"
 import React, { useEffect, useState, useCallback } from 'react';
 
-const WelcomeSection = () => {
-  const scaleStart = 0.5; // Start scale
-  const scaleEnd = 2.5; // End scale
-  const translateYStart = 0; // Initial translateY position
-  const scaleIncreaseRate = 0.01; // Increased rate of scaling per pixel scrolled
-  const [scale, setScale] = useState(scaleStart);
-  const [isFullScale, setIsFullScale] = useState(false); // Tracks if full scaling is achieved
+const WelcomeSection: React.FC = () => {
+  const scaleStart: number = 0.5; // Start scale
+  const scaleEnd: number = 2.5; // End scale
+  const translateYStart: number = 0; // Initial translateY position
+  const scaleIncreaseRate: number = 0.01; // Increased rate of scaling per pixel scrolled
+  const [scale, setScale] = useState<number>(scaleStart);
+  const [isFullScale, setIsFullScale] = useState<boolean>(false); // Tracks if full scaling is achieved
   const [lastTouchY, setLastTouchY] = useState<number | null>(null); // Last touch Y position for touch events
-  const [textColor, setTextColor] = useState('#32ABBC'); // State for text color
+  const [textColor, setTextColor] = useState<string>('#32ABBC'); // State for text color
 
-  const handleInteraction = useCallback((deltaY: number, isTouch: boolean = false) => {
-    const scrollDelta = Math.abs(deltaY) * (isTouch ? 1 : 50); // Normalize wheel delta, amplify for touch for consistent behavior
-    const scrollDown = deltaY > 0;
+  const handleInteraction = useCallback((deltaY: number, isTouch: boolean = false): boolean => {
+    const scrollDelta: number = Math.abs(deltaY) * (isTouch ? 1 : 50); // Normalize wheel delta, amplify for touch for consistent behavior
+    const scrollDown: boolean = deltaY > 0;
 
+    let newScale: number = scale;
     if (scrollDown) {
-      if (!isFullScale) {
-        let newScale = Math.min(scale + scaleIncreaseRate * scrollDelta, scaleEnd);
+      if (scale < scaleEnd) {
+        newScale = Math.min(scale + scaleIncreaseRate * scrollDelta, scaleEnd);
         setScale(newScale);
-        if (newScale >= scaleEnd) {
-          setIsFullScale(true);
-          setTimeout(() => { setIsFullScale(false); }, 500); // Allow natural scrolling after a delay when full scale is reached
-        }
       }
     } else {
-      if (window.scrollY === 0) {
-        let newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
+      if (window.scrollY === 0 && scale > scaleStart) {
+        newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
         setScale(newScale);
-        if (newScale <= scaleStart) {
-          setIsFullScale(false); // Re-enable scaling up when scaled back to start
-        }
       }
     }
-  }, [scale, isFullScale, scaleStart, scaleEnd, scaleIncreaseRate]);
 
-  const handleScroll = useCallback((event:any) => {
-    handleInteraction(event.deltaY);
-    event.preventDefault(); // Prevent default scroll behavior during active scaling
+    // Return true only if the scale has actually changed
+    return newScale !== scale;
+  }, [scale, scaleStart, scaleEnd, scaleIncreaseRate]);
+
+  const handleScroll = useCallback((event: WheelEvent): void => {
+    if (handleInteraction(event.deltaY)) {
+      event.preventDefault(); // Prevent default only if scaling occurs
+    }
   }, [handleInteraction]);
 
-  const handleTouchStart = useCallback((event:any) => {
+  const handleTouchStart = useCallback((event: TouchEvent): void => {
     setLastTouchY(event.touches[0].clientY);
   }, []);
 
-  const handleTouchMove = useCallback((event:any) => {
+  const handleTouchMove = useCallback((event: TouchEvent): void => {
     if (lastTouchY !== null) {
-      const touchY = event.touches[0].clientY;
-      const deltaY = lastTouchY - touchY;
-      handleInteraction(deltaY, true);
+      const touchY: number = event.touches[0].clientY;
+      const deltaY: number = lastTouchY - touchY;
+      if (handleInteraction(deltaY, true)) {
+        event.preventDefault(); // Prevent default only if scaling occurs
+      }
       setLastTouchY(touchY);
-      event.preventDefault(); // Prevent default scroll behavior during touch move
     }
   }, [lastTouchY, handleInteraction]);
 
@@ -67,7 +66,7 @@ const WelcomeSection = () => {
   }, [handleScroll, handleTouchStart, handleTouchMove]);
 
   useEffect(() => {
-    const coversText = scale > 1.2;
+    const coversText: boolean = scale > 1.2;
     setTextColor(coversText ? 'white' : '#32ABBC');
   }, [scale]);
 
