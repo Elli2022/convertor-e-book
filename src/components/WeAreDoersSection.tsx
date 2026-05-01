@@ -1,52 +1,13 @@
-"use client"
-import React, { useRef, useEffect } from 'react';
+"use client";
+
+import { useRevealOnIntersect } from "@/hooks/useRevealOnIntersect";
 
 const WeAreDoersSection: React.FC = () => {
-  const textContainerRef = useRef<HTMLDivElement>(null); // Typreferens till textcontainern
-
-  useEffect(() => {
-    const observerOptions: IntersectionObserverInit = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.1
-    };
-
-    const textObserver = new IntersectionObserver((entries, observer) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('wave-in');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, observerOptions);
-
-    const nodes = textContainerRef.current?.querySelectorAll('h1, p, p > span');
-    nodes?.forEach((node) => {
-      textObserver.observe(node);
-    });
-
-    return () => {
-      if (textObserver) {
-        nodes?.forEach((node) => {
-          textObserver.unobserve(node);
-        });
-      }
-    };
-  }, []);
+  const textContainerRef = useRevealOnIntersect<HTMLDivElement>();
 
   return (
     <>
-      <style>
-        {`
-          @media (max-width: 480px) {
-            .small-viewport-mt {
-              margin-top: 153px !important; /* Öka margin-top för mindre skärmar */
-            }
-          }
-        `}
-      </style>
-      <section className="text-center w-full relative overflow-hidden flex items-center justify-center bg-[#15253E] p-8 sm:p-12 md:p-16 lg:p-20">
-        {/* Ellipse, no animation and moved up slightly */}
+      <section className="text-center w-full relative overflow-hidden flex items-center justify-center bg-[#15253E] px-8 py-12 sm:px-12 sm:py-16 md:px-16 md:py-20 lg:px-20 lg:py-24">
         <div
           className="absolute left-1/2 top-1/3 w-32 h-32 bg-[#32ABBC] rounded-full z-0"
           style={{
@@ -54,25 +15,28 @@ const WeAreDoersSection: React.FC = () => {
           }}
         />
 
-        {/* Text Container */}
-        <div ref={textContainerRef} className="z-10 max-w-4xl mx-auto px-4 mt-[116px] lg:mt-[76px] small-viewport-mt">
-          <h1 className="text-white font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight century-gothic-pro">
+        <div
+          ref={textContainerRef}
+          className="z-10 mx-auto mt-[116px] max-w-4xl px-4 max-[480px]:mt-[153px] lg:mt-[76px]"
+        >
+          <h1 className="font-century-gothic-pro text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl lg:text-6xl">
             Med andra ord: <br />
             vi är <span className="text-[#33ABBD]">doers.</span>
           </h1>
-          <p className="text-white text-base md:text-lg lg:text-xl font-extralight mt-4 text-left max-w-4xl">
+          <p className="section-copy mt-4 max-w-4xl text-left text-base font-extralight text-white md:text-lg lg:text-xl">
             Vi pratar inte. Vi gör. Vi levererar och vi får folk att se nya
             möjligheter. Varje dag, i varje projekt, anstränger vi oss alltid
-            för att ge det där lilla extra. Och så har vi himla kul under tiden,
-            förstås.
+            för att ge det där lilla extra. Och så har vi himla kul under
+            tiden, förstås.
           </p>
         </div>
       </section>
-         {/* Container Div för horisontell linje */}
       <div className="w-full bg-[#15253E] flex justify-center py-2">
-        <div className="border-t border-gray-300 w-11/12" style={{ borderWidth: '1px' }}></div>
+        <div
+          className="w-11/12 border-t border-gray-300"
+          style={{ borderWidth: "1px" }}
+        />
       </div>
-
     </>
   );
 };

@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 const MenuModal = ({
   isOpen,
   onClose,
@@ -7,31 +5,25 @@ const MenuModal = ({
   isOpen: boolean;
   onClose: () => void;
 }) => {
-
-  
   if (!isOpen) return null;
 
   return (
     <div
-    className="fixed inset-0 z-50 bg-[#14243DE6]/30 p-5 flex flex-col items-center justify-center"
-
-    onClick={onClose}
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#14243DE6]/30 p-5"
+      onClick={onClose}
     >
-          {/* Close Icon */}
-<button
-  className="absolute top-1 right-5 text-white z-10 no-cursor-pointer"
-  onClick={onClose}
-  aria-label="Close menu"
-  style={{ fontSize: "64px" }} 
->
-  &times;
-</button>
+      <button
+        className="absolute right-5 top-1 z-10 text-white"
+        onClick={onClose}
+        aria-label="Stäng meny"
+        style={{ fontSize: "64px" }}
+      >
+        &times;
+      </button>
 
-      {/* Menu Content */}
       <ul
         id="menu-main"
-        className="menu cf w-full flex flex-col items-center justify-center space-y-10"
-
+        className="menu cf flex h-full w-full flex-col items-center justify-center space-y-10"
         style={{
           padding: "12% 0 0",
           margin: 0,
@@ -41,14 +33,13 @@ const MenuModal = ({
           position: "absolute",
         }}
       >
-        {/* Menu Items */}
-        <li className="menu-item menu-item-has-children ">
-          <ul className="sub-menu cursor-pointer">
+        <li className="menu-item menu-item-has-children">
+          <ul className="sub-menu">
             <li className="menu-item mb-3">
               <a
                 href="https://convertor.se/"
                 className="text-white font-font-medium text-sm leading-loose w-full text-center py-2 "
-                >
+              >
                 TJÄNSTER
               </a>
             </li>

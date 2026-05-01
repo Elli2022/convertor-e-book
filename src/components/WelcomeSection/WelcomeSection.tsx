@@ -1,102 +1,182 @@
-"use client"
-import React, { useEffect, useState, useCallback } from 'react';
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+
+const PROGRESS_MIN = 0;
+const PROGRESS_MAX = 1;
+const WHEEL_STEP = 0.0014;
+const TOUCH_STEP = 0.0021;
+const SCALE_START = 0.5;
+const SCALE_END = 2.75;
+
+const clamp = (value: number, min: number, max: number) =>
+  Math.min(max, Math.max(min, value));
 
 const WelcomeSection: React.FC = () => {
-  const scaleStart: number = 0.5;
-  const scaleEnd: number = 2.5;
-  const translateYStart: number = 0;
-  const scaleIncreaseRate: number = 0.01;
-  const [scale, setScale] = useState<number>(scaleStart);
-  const [isFullScale, setIsFullScale] = useState<boolean>(false);
-  const [lastTouchY, setLastTouchY] = useState<number | null>(null);
-  const [textColor, setTextColor] = useState<string>('#32ABBC');
-
-  const handleInteraction = useCallback((deltaY: number, isTouch: boolean = false): void => {
-    const scrollDelta: number = Math.abs(deltaY) * (isTouch ? 2 : 50);
-    const scrollDown: boolean = deltaY > 0;
-
-    let newScale: number = scale;
-    if (scrollDown) {
-      if (scale < scaleEnd) {
-        newScale = Math.min(scale + scaleIncreaseRate * scrollDelta, scaleEnd);
-        setScale(newScale);
-        if (newScale >= scaleEnd) {
-          // Introduce a shorter delay before allowing natural scrolling
-          setTimeout(() => {
-            setIsFullScale(true);
-          }, 500); // Delay in milliseconds, adjust as needed
-        }
-      }
-    } else {
-      if (window.scrollY === 0 && scale > scaleStart) {
-        newScale = Math.max(scale - scaleIncreaseRate * scrollDelta, scaleStart);
-        setScale(newScale);
-        if (newScale <= scaleStart) {
-          setIsFullScale(false);
-        }
-      }
-    }
-  }, [scale, scaleStart, scaleEnd, scaleIncreaseRate]);
-
-  const handleScroll = useCallback((event: WheelEvent): void => {
-    handleInteraction(event.deltaY);
-    if (!isFullScale) {
-      event.preventDefault(); // Only prevent default if isFullScale is not true
-    }
-  }, [handleInteraction, isFullScale]);
-
-  const handleTouchStart = useCallback((event: TouchEvent): void => {
-    setLastTouchY(event.touches[0].clientY);
-  }, []);
-
-  const handleTouchMove = useCallback((event: TouchEvent): void => {
-    if (lastTouchY !== null) {
-      const touchY: number = event.touches[0].clientY;
-      const deltaY: number = lastTouchY - touchY;
-      handleInteraction(deltaY, true);
-      if (!isFullScale) {
-        event.preventDefault(); // Only prevent default if isFullScale is not true
-      }
-      setLastTouchY(touchY);
-    }
-  }, [lastTouchY, handleInteraction, isFullScale]);
+  const [progress, setProgress] = useState(0);
+  const heroRef = useRef<HTMLElement>(null);
+  const progressRef = useRef(0);
+  const lastTouchYRef = useRef<number | null>(null);
+  const frameRef = useRef<number | null>(null);
+  const prefersReducedMotionRef = useRef(false);
 
   useEffect(() => {
-    window.addEventListener('wheel', handleScroll, { passive: false });
-    window.addEventListener('touchstart', handleTouchStart, { passive: false });
-    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    progressRef.current = progress;
+  }, [progress]);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const syncMotionPreference = () => {
+      prefersReducedMotionRef.current = mediaQuery.matches;
+    };
+
+    syncMotionPreference();
+    mediaQuery.addEventListener("change", syncMotionPreference);
 
     return () => {
-      window.removeEventListener('wheel', handleScroll);
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchmove', handleTouchMove);
+      mediaQuery.removeEventListener("change", syncMotionPreference);
     };
-  }, [handleScroll, handleTouchStart, handleTouchMove]);
+  }, []);
 
   useEffect(() => {
-    const coversText: boolean = scale > 1.2;
-    setTextColor(coversText ? 'white' : '#32ABBC');
-  }, [scale]);
+    const commitProgress = (nextProgress: number) => {
+      const clamped = clamp(nextProgress, PROGRESS_MIN, PROGRESS_MAX);
 
-  const ellipsisStyle = {
-    transform: `scale(${scale}) translateY(${translateYStart}px)`,
-    transition: 'transform 0.5s ease-out'
-  };
+      if (clamped === progressRef.current) {
+        return;
+      }
+
+      progressRef.current = clamped;
+
+      if (frameRef.current !== null) {
+        cancelAnimationFrame(frameRef.current);
+      }
+
+      frameRef.current = requestAnimationFrame(() => {
+        setProgress(clamped);
+      });
+    };
+
+    const shouldOwnScroll = (deltaY: number) => {
+      const hero = heroRef.current;
+      if (!hero || prefersReducedMotionRef.current || deltaY === 0) {
+        return false;
+      }
+
+      const heroRect = hero.getBoundingClientRect();
+      const heroIsLeadingViewport =
+        heroRect.top <= window.innerHeight * 0.18 &&
+        heroRect.bottom >= window.innerHeight * 0.55;
+      const pageIsAtTop = window.scrollY <= 8;
+      const currentProgress = progressRef.current;
+
+      if (deltaY > 0) {
+        return heroIsLeadingViewport && currentProgress < PROGRESS_MAX;
+      }
+
+      return pageIsAtTop && currentProgress > PROGRESS_MIN;
+    };
+
+    const applyInteraction = (deltaY: number, stepSize: number) => {
+      if (!shouldOwnScroll(deltaY)) {
+        return false;
+      }
+
+      const direction = deltaY > 0 ? 1 : -1;
+      const nextProgress =
+        progressRef.current + Math.abs(deltaY) * stepSize * direction;
+
+      commitProgress(nextProgress);
+      return true;
+    };
+
+    const handleWheel = (event: WheelEvent) => {
+      if (applyInteraction(event.deltaY, WHEEL_STEP)) {
+        event.preventDefault();
+      }
+    };
+
+    const handleTouchStart = (event: TouchEvent) => {
+      lastTouchYRef.current = event.touches[0]?.clientY ?? null;
+    };
+
+    const handleTouchMove = (event: TouchEvent) => {
+      if (lastTouchYRef.current === null) {
+        return;
+      }
+
+      const currentTouchY = event.touches[0]?.clientY ?? lastTouchYRef.current;
+      const deltaY = lastTouchYRef.current - currentTouchY;
+
+      if (applyInteraction(deltaY, TOUCH_STEP)) {
+        event.preventDefault();
+      }
+
+      lastTouchYRef.current = currentTouchY;
+    };
+
+    const handleTouchEnd = () => {
+      lastTouchYRef.current = null;
+    };
+
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    window.addEventListener("touchstart", handleTouchStart, { passive: true });
+    window.addEventListener("touchmove", handleTouchMove, { passive: false });
+    window.addEventListener("touchend", handleTouchEnd, { passive: true });
+
+    return () => {
+      if (frameRef.current !== null) {
+        cancelAnimationFrame(frameRef.current);
+      }
+
+      window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, []);
+
+  const scale = SCALE_START + (SCALE_END - SCALE_START) * progress;
+  const highlightColor = progress >= 0.48 ? "white" : "#32ABBC";
 
   return (
-    <>
-      <section className="text-center w-full relative overflow-hidden flex items-center justify-center" style={{ background: '#D3E0E5', height: '503px' }}>
-        <div style={ellipsisStyle} className="absolute top-1/3 w-32 h-32 bg-[#32ABBC] rounded-full z-0" />
-        <div className="z-10 relative max-w-4xl mx-auto px-4">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold font-century-gothic-pro text-black">Välkommen till</h1>
-          <div className="mt-2 text-lg md:text-xl lg:text-3xl font-bold font-century-gothic-pro text-black">en byrå fylld av passionerade,</div>
-          <div className={`text-lg md:text-xl lg:text-3xl font-bold font-century-gothic-pro`} style={{ color: textColor }}>
-            <span style={{ color: 'black' }}>prestigelösa och </span>
-            resultatdrivna doers.
-          </div>
+    <section
+      ref={heroRef}
+      className="relative flex w-full items-center justify-center overflow-hidden text-center"
+      style={{
+        background: "#D3E0E5",
+        minHeight: "clamp(31rem, 78vh, 44rem)",
+        touchAction: progress >= PROGRESS_MAX ? "pan-y" : "none",
+      }}
+    >
+      <div
+        className="absolute left-1/2 top-1/2 z-0 h-32 w-32 rounded-full bg-[#32ABBC] sm:h-36 sm:w-36"
+        style={{
+          transform: `translate(-50%, -50%) scale(${scale})`,
+          transition: "transform 180ms ease-out",
+          willChange: "transform",
+        }}
+      />
+
+      <div className="relative z-10 mx-auto max-w-4xl px-4">
+        <h1 className="font-century-gothic-pro text-4xl font-bold text-black md:text-6xl lg:text-7xl">
+          Välkommen till
+        </h1>
+        <div className="mt-2 font-century-gothic-pro text-lg font-bold text-black md:text-xl lg:text-3xl">
+          en byrå fylld av passionerade,
         </div>
-      </section>
-    </>
+        <div
+          className="font-century-gothic-pro text-lg font-bold md:text-xl lg:text-3xl"
+          style={{
+            color: highlightColor,
+            transition: "color 160ms ease-out",
+          }}
+        >
+          <span className="text-black">prestigelösa och </span>
+          resultatdrivna doers.
+        </div>
+      </div>
+    </section>
   );
 };
 

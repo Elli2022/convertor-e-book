@@ -3,28 +3,25 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --color-brand-ink: #14243d;
+  --color-brand-sky: #d3e0e5;
+  --color-brand-accent: #32abbc;
+  --color-brand-white: #ffffff;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+html {
+  background: var(--color-brand-sky);
+  scroll-behavior: smooth;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-
+  margin: 0;
+  min-height: 100vh;
+  color: var(--color-brand-ink);
+  background: var(--color-brand-sky);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 @layer utilities {
@@ -32,10 +29,6 @@ body {
     text-wrap: balance;
   }
 }
-
-
-
-
 @keyframes wave-animation {
   0% { opacity: 0; transform: translateY(20px); }
   100% { opacity: 1; transform: translateY(0px); }
@@ -48,4 +41,9 @@ body {
 
 .wave-in-view {
   visibility: visible !important;
+}
+
+.section-copy {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  line-height: 1.6;
 }

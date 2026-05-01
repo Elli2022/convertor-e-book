@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Convertor
 
-## Getting Started
+Interaktiv presentationssida byggd i Next.js för Convertor. Projektet bevarar den ursprungliga visuella identiteten med samma färgpalett, samma berättande sektioner och samma scrollidé i heron, men i en modernare och mer stabil kodbas.
 
-First, run the development server:
+## Vad projektet innehåller
+
+- En single-page upplevelse med sektionerna `Välkommen till`, `Vi är passionerade`, `Vi är prestigelösa`, `Vi är resultatdrivna` och `Vi är doers`.
+- En hero-sektion där den turkosa ellipsen reagerar på scroll och touch.
+- Responsiv navigation och mobil meny.
+- Bildoptimering via `next/image`.
+
+## Teknik
+
+- Next.js 15
+- React 19
+- TypeScript
+- Tailwind CSS 3
+
+## Lokal körning
+
+Installera beroenden:
+
+```bash
+npm install
+```
+
+Starta utvecklingsläge:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Bygg produktionsversion:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Kör lint:
 
-## Learn More
+```bash
+npm run lint
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Versionsstrategi
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Repo:t bör använda:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- `main` för den aktuella produktionen
+- tags för historiska versionspunkter
+- ett litet antal `release/*`-grenar bara för de versioner som också ska ha egna Netlify branch deploys
 
-## Deploy on Vercel
+Det här följer bättre praxis än att låta varje experiment eller deploy leva kvar som en separat långlivad branch.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Rekommenderade historiska milstolpar
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+De viktigaste versionspunkterna i den äldre deploykedjan kan representeras så här:
+
+- `v0.1.0` – grundversionen före scrollspåret
+- `v0.2.0` – första tydliga scrollförbättringen från 24 april 2024
+- `v0.3.0` – mobile-first-steg från 25 april 2024
+- `v0.4.0` – touchscroll stabiliserad den 27 april 2024
+- `v0.5.0` – sista historiska deploylinjen från 28 april 2024
+- `v1.0.0` – moderniserad huvudversion
+
+## Netlify-upplägg
+
+För ett rent och hållbart upplägg på Netlify rekommenderas:
+
+- `main` som production branch med automatisk deploy till huvud-URL:en
+- `release/v0.2`, `release/v0.3`, `release/v0.4` och `release/v0.5` som branch deploys för äldre publika versionslänkar
+- Deploy previews för framtida förbättringar via pull requests
+
+Det ger en huvuddeploy som alltid uppdateras automatiskt, samtidigt som du kan behålla ett litet antal tydliga historiska versionsdeployer under samma Netlify-site.
+
+## Förbättringar i den moderniserade versionen
+
+- Mer stabil scroll- och touchlogik i hero-sektionen
+- Bättre metadata och svensk språkkonfiguration
+- Bättre bildhantering och prestanda genom `next/image`
+- Städade beroenden och modernare lint-skript
+- Gemensam reveal-logik för innehållssektionerna

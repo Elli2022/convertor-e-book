@@ -1,59 +1,49 @@
-"use client"
-import React, { useRef, useEffect } from 'react';
+"use client";
 
-const NewSection: React.FC = () => {
-  const textContainerRef = useRef<HTMLDivElement>(null); // Typreferens till textcontainern
+import Image from "next/image";
 
-  useEffect(() => {
-    const observerOptions: IntersectionObserverInit = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.1
-    };
+import { useRevealOnIntersect } from "@/hooks/useRevealOnIntersect";
 
-    const textObserver = new IntersectionObserver((entries, observer) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('wave-in');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, observerOptions);
-
-    const nodes = textContainerRef.current?.querySelectorAll('h1, p, p > span');
-    nodes?.forEach((node) => {
-      textObserver.observe(node);
-    });
-
-    return () => {
-      if (textObserver) {
-        nodes?.forEach((node) => {
-          textObserver.unobserve(node);
-        });
-      }
-    };
-  }, []);
+const WeArePassionateSection: React.FC = () => {
+  const textContainerRef = useRevealOnIntersect<HTMLDivElement>();
 
   return (
-    <>
-      <section className="text-center w-full relative overflow-hidden flex flex-col lg:flex-row items-center justify-center bg-[#15253E] p-8 sm:p-12 md:p-16 lg:p-20">
-        {/* Image Container */}
-        <div className="w-full lg:w-1/2 lg:order-2 flex justify-center lg:justify-end lg:ml-14 group" style={{ maxWidth: '503px' }}>
-          <img src="/images/imageConvertor1.jpeg" alt="Beskrivande text" className="w-full h-auto lg:h-[503px] lg:w-[503px] object-cover transition-transform duration-300 ease-in-out group-hover:scale-110" />
-        </div>
-        
-        {/* Text Container */}
-        <div ref={textContainerRef} className="w-full lg:w-1/2 lg:order-1 flex flex-col text-left justify-center">
-          <h1 className="text-white font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight font-century-gothic-pro mt-5">Vi är <span className="text-[#33ABBD]">passionerade</span></h1>
-          <p className="text-white text-base md:text-lg lg:text-xl font-extralight mt-4">
-            Vi är passionerade – det ligger i vårt DNA.<br/>
-            Vi är nyfikna på alla våra uppdragsgivares olika branscher, men också på de möjligheter vi med teknikens hjälp kan skapa tillsammans.<br/><br/>
-            Vi är alltid lojala mot uppgiften, drar oss inte för att utmana det förväntade och släpper inte greppet förrän vi levererat en lösning vi alla kan vara stolta över.
-          </p>
-        </div>
-      </section>
-    </>
+    <section className="text-center w-full relative overflow-hidden flex flex-col lg:flex-row items-center justify-center bg-[#15253E] px-8 py-12 sm:px-12 sm:py-16 md:px-16 md:py-20 lg:px-20 lg:py-24">
+      <div
+        className="group flex w-full justify-center lg:order-2 lg:w-1/2 lg:justify-end lg:pl-14"
+        style={{ maxWidth: "503px" }}
+      >
+        <Image
+          src="/images/imageConvertor1.jpeg"
+          alt="Convertor-team i möte"
+          width={4096}
+          height={2731}
+          sizes="(min-width: 1024px) 503px, 100vw"
+          className="h-auto w-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-105 lg:h-[503px] lg:w-[503px]"
+        />
+      </div>
+
+      <div
+        ref={textContainerRef}
+        className="w-full lg:order-1 lg:w-1/2 lg:text-left"
+      >
+        <h1 className="mt-6 font-century-gothic-pro text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl lg:mt-0 lg:text-6xl">
+          Vi är <span className="text-[#33ABBD]">passionerade</span>
+        </h1>
+        <p className="section-copy mt-4 text-left text-base font-extralight text-white md:text-lg lg:text-xl">
+          Vi är passionerade – det ligger i vårt DNA.
+          <br />
+          Vi är nyfikna på alla våra uppdragsgivares olika branscher, men också
+          på de möjligheter vi med teknikens hjälp kan skapa tillsammans.
+          <br />
+          <br />
+          Vi är alltid lojala mot uppgiften, drar oss inte för att utmana det
+          förväntade och släpper inte greppet förrän vi levererat en lösning vi
+          alla kan vara stolta över.
+        </p>
+      </div>
+    </section>
   );
 };
 
-export default NewSection;
+export default WeArePassionateSection;

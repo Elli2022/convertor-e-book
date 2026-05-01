@@ -1,4 +1,4 @@
-import React from "react";
+import Image from "next/image";
 
 const Footer = () => {
   return (
@@ -12,42 +12,42 @@ const Footer = () => {
       >
         <a
           href="https://convertor.se/tjanster/"
-          className="hover:underline no-cursor-pointer"
+          className="hover:underline"
           style={{ color: "white", wordWrap: "break-word" }}
         >
           Tjänster
         </a>
         <a
           href="https://convertor.se/kundcase/"
-          className="hover:underline no-cursor-pointer"
+          className="hover:underline"
           style={{ color: "white", wordWrap: "break-word" }}
         >
           Case
         </a>
         <a
           href="https://convertor.se/greenhouse/"
-          className="hover:underline no-cursor-pointer"
+          className="hover:underline"
           style={{ color: "white", wordWrap: "break-word" }}
         >
           Greenhouse
         </a>
         <a
           href="https://convertor.se/insikt/"
-          className="hover:underline no-cursor-pointer"
+          className="hover:underline"
           style={{ color: "white", wordWrap: "break-word" }}
         >
           Insikt
         </a>
         <a
           href="https://convertor.se/karriar/"
-          className="hover:underline no-cursor-pointer"
+          className="hover:underline"
           style={{ color: "white", wordWrap: "break-word" }}
         >
           Karriär
         </a>
         <a
           href="https://convertor.se/kontakt/"
-          className="hover:underline no-cursor-pointer"
+          className="hover:underline"
           style={{ color: "white", wordWrap: "break-word" }}
         >
           Kontakt
@@ -76,27 +76,31 @@ const Footer = () => {
         <div>
           <a
             href="https://convertor.se/"
-            className="lg:inline-block lg:mx-0 mx-auto no-cursor-pointer"
+            className="mx-auto lg:mx-0 lg:inline-block"
           >
-            <img
+            <Image
               src="/images/convertorLogo.png"
               alt="Convertor Logo"
-              className="mx-auto h-10 sm:h-9 md:h-8 lg:h-6 xl:h-8 mb-12 mt-12"
+              width={600}
+              height={107}
+              sizes="(min-width: 1024px) 160px, 144px"
+              className="mx-auto mb-12 mt-12 h-10 w-auto sm:h-9 md:h-8 lg:h-6 xl:h-8"
             />
-          </a>{" "}
+          </a>
           <div className="container mx-auto flex flex-col lg:flex-row lg:justify-between items-center space-y-4 lg:space-y-0 lg:space-x-4">
 
-            {/* Sociala medieikoner - Placerade först för små skärmar, men visuellt flyttas till höger på större skärmar */}
             <div className="flex justify-center lg:justify-end gap-4 lg:order-last lg:ml-auto pl-4">
               <a
                 href="https://www.facebook.com/convertorsverige?locale=sv_SE"
                 aria-label="Facebook"
-                className="hover:opacity-75 no-cursor-pointer"
+                className="hover:opacity-75"
               >
-                <img
+                <Image
                   src="/images/Link_1.svg"
                   alt="Facebook"
-                  className="h-6 w-6 sm:h-8 sm:w-8 no-cursor-pointer"
+                  width={32}
+                  height={32}
+                  className="h-6 w-6 sm:h-8 sm:w-8"
                 />
               </a>
               <a
@@ -104,41 +108,42 @@ const Footer = () => {
                 aria-label="LinkedIn"
                 className="hover:opacity-75"
               >
-                <img
+                <Image
                   src="/images/Link_2.svg"
                   alt="LinkedIn"
-                  className="h-6 w-6 sm:h-8 sm:w-8 no-cursor-pointer"
+                  width={32}
+                  height={32}
+                  className="h-6 w-6 sm:h-8 sm:w-8"
                 />
               </a>
               <a
                 href="https://www.instagram.com/convertor_malmo/"
                 aria-label="Instagram"
-                className="hover:opacity-75 no-cursor-pointer"
+                className="hover:opacity-75"
               >
-                <img
+                <Image
                   src="/images/Link_3.svg"
                   alt="Instagram"
-                  className="h-6 w-6 sm:h-8 sm:w-8 no-cursor-pointer"
+                  width={32}
+                  height={32}
+                  className="h-6 w-6 sm:h-8 sm:w-8"
                 />
               </a>
             </div>
           <div>
-            {/* Textsektion */}
             <p className="lg:order-2 lg:flex-grow text-[13px] sm:text-[15px] lg:text-[16px] font-light text-[rgba(255,255,255,0.5)] lg:text-right lg:ml-4">
-              {" "}
-              {/* Lägg till margin här */}
               Alla rättigheter reserverade © 2023 {" | "}
               <span className="mx-1">Läs vår</span>
               <a
                 href="https://convertor.se/integritetspolicy/"
-                className="hover:underline text-[rgba(255,255,255,0.80)] no-cursor-pointer"
+                className="hover:underline text-[rgba(255,255,255,0.80)]"
               >
                 Integritetspolicy
               </a>
               <span className="mx-1">|</span>
               <a
                 href="https://convertor.se/integritetspolicy/#!"
-                className="hover:underline text-[rgba(255,255,255,0.80)] no-cursor-pointer"
+                className="hover:underline text-[rgba(255,255,255,0.80)]"
               >
                 Ändra dina inställningar
               </a>
